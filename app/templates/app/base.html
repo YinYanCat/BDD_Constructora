@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App</title>
+    {% load static %}
+
+    
+    <link rel="stylesheet" href="{% static 'app/css/estilos.css' %}">
+    {% block css %}
+    {% endblock %}
+</head>
+<body>
+
+    <header id="banner">
+        <h1>App</h1>
+        <nav id="navbar">
+            <ul>
+                <li><a href="{% url 'home' %}">Inicio</a></li>
+
+            </ul>
+        </nav>
+    </header>
+    <div id="content">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </div>
+    {% block js %}
+
+    {% endblock %}
+
+    <footer>
+        <p>2025 Bases de datos</p>
+    </footer>
+    
+</body>
+</html>
