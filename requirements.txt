@@ -1,0 +1,19 @@
+# instalar con: pip install -r requirements.txt
+# .env que contenga
+#   DB_NAME=
+#   DB_USER=
+#   DB_PASSWORD=
+#   DB_HOST=
+#   DB_PORT=
+
+altgraph==0.17.4
+asgiref==3.8.1
+Django==3.2.25
+packaging==24.2
+psycopg2-binary==2.9.10
+pyinstaller==6.11.1
+pyinstaller-hooks-contrib==2024.10
+python-dotenv==1.1.0
+pytz==2025.2
+setuptools==75.6.0
+sqlparse==0.5.3
