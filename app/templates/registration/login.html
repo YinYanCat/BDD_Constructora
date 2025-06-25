@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Iniciar Sesion</title>
+</head>
+<body>
+    <p>Iniciar Sesion</p>
+    <form method="post" action="">
+        {% csrf_token %}        
+        <input type="text" name="username" placeholder="Usuario" required />
+        <input type="password" name="password" placeholder="Contraseña" required />
+        <button type="submit">Iniciar Sesion</button>
+</body>
+</html>
