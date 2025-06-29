@@ -35,6 +35,21 @@
 
     <footer>
         <p>2025 Bases de datos</p>
+       <nav id="navbar">
+    <ul>
+        <li><a href="{% url 'home' %}">Inicio</a></li>
+        {% if user.is_authenticated %}
+            <li>
+                <form action="{% url 'salir' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">Salir</button>
+                </form>
+            </li>
+        {% else %}
+            <li><a href="{% url 'login' %}">Ingresar</a></li>
+        {% endif %}
+    </ul>
+</nav>
     </footer>
     
 </body>
