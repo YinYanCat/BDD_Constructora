@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Implementos asignados</title>
+</head>
+<body>
+    <h1>Implementos y sus trabajadores</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Empleado</th>
+        </tr>
+        {% for imp in implementos %}
+        <tr>
+            <td>{{ imp.id }}</td>
+            <td>{{ imp.itype }}</td>
+            <td>{{ imp.description }}</td>
+            <td>{{ imp.worker.first_name }} {{ imp.worker.last_name }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
