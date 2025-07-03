@@ -30,7 +30,7 @@ class Empleado(models.Model):
     rut = models.CharField(primary_key=True, max_length=16)
     first_name = models.CharField(null=False, max_length=200)
     last_name = models.CharField(null=False, max_length=200)
-    title = models.CharField(null=False, max_length=200)
+    salary = models.FloatField(null=False)    
     contract_date = models.DateField()
     phone = models.CharField(null=False, max_length=16)
     email = models.CharField(null=False, max_length=200)
@@ -56,15 +56,18 @@ class Horario(models.Model):
         unique_together = ('worker', 'day_of_week')
 
 class Proyecto(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(null=False, max_length=200)
     start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
     budget = models.FloatField()
     description = models.CharField(null=False, max_length=200)
+    is_active = models.BooleanField(default=True)  # ← esto te permite marcarlo como activo/inactivo
 
 class EmpleadoProyecto(models.Model):
     worker = models.ForeignKey(Empleado, null=False, on_delete=models.PROTECT)
     proyect = models.ForeignKey(Proyecto, null=False, on_delete=models.PROTECT)
-    bonus_pay = models.IntegerField()
+    bonus_pay = models.FloatField(default=0)
     position = models.CharField(null=False, max_length=200)
 
 class Capacitacion(models.Model):
@@ -100,6 +103,7 @@ class AsignacionVehiculo(models.Model):
     worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)
 
 class Implemento(models.Model):
+    id = models.AutoField(primary_key=True)
     itype = models.CharField(max_length=100)
     description = models.TextField()
     worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)
