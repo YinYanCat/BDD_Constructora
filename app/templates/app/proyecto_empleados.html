@@ -1,0 +1,17 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+<h1>Empleados en proyecto: {{ proyecto.name }}</h1>
+
+<ul>
+  {% for ep in empleados_proyecto %}
+    <li>
+      {{ ep.worker.first_name }} {{ ep.worker.last_name }} - Posición: {{ ep.position }} - Bono: {{ ep.bonus_pay }}
+    </li>
+  {% empty %}
+    <li>No hay empleados asignados a este proyecto.</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'home' %}">Volver al inicio</a>
+{% endblock %}
