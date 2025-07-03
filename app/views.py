@@ -5,7 +5,8 @@ from django.contrib import messages
 
 from .forms.PermisoForm import PermisoForm
 from .factories.PermisoFactory import PermisoFactory
-
+from .forms.HorarioForm import HorarioForm
+from .factories.HorarioFactory import HorarioFactory
 from .models import Proyecto, EmpleadoProyecto, Implemento
 
 
@@ -18,8 +19,7 @@ def salir(request):
     return redirect('/')
 
 @login_required
-
-def registro_horario(request):
+def registro_permiso(request):
     if request.method == 'POST':
         form = PermisoForm(request.POST)
         if form.is_valid():
@@ -50,3 +50,22 @@ def proyecto_empleados(request, proyecto_id):
 def lista_implementos(request):
     implementos = Implemento.objects.select_related('worker').all()
     return render(request, 'app/lista_implementos.html', {'implementos': implementos})
+
+def registro_horario(request):
+    if request.method == 'POST':
+        form = HorarioForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            factory = HorarioFactory()
+            try: 
+                factory.crear_horario(
+                    data['worker'], data['day_of_week'], data['start'], data['end']
+                )
+                messages.success(request, 'Horario creado con exito.')
+                form = HorarioForm()
+                return redirect('registro horario')
+            except Exception as e:
+                form.add_error(None, str(e))
+    else:
+        form = HorarioForm()
+    return render(request, 'PAGINA REGISTRO HORARIO', {'form': form})
