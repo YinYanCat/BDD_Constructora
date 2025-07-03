@@ -4,4 +4,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('salir/', views.salir, name='salir'),
     path('proyecto/<int:proyecto_id>/empleados/', views.proyecto_empleados, name='proyecto_empleados'),
+    path('implementos/', views.lista_implementos, name='lista_implementos'),
 ]

@@ -103,6 +103,7 @@ class AsignacionVehiculo(models.Model):
     worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)
 
 class Implemento(models.Model):
+    id = models.AutoField(primary_key=True)
     itype = models.CharField(max_length=100)
     description = models.TextField()
     worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from .models import Proyecto, EmpleadoProyecto
+from .models import Proyecto, EmpleadoProyecto, Implemento
 
 @login_required
 def home(request):
@@ -19,3 +19,8 @@ def proyecto_empleados(request, proyecto_id):
         'proyecto': proyecto,
         'empleados_proyecto': empleados_proyecto,
     })
+
+@login_required
+def lista_implementos(request):
+    implementos = Implemento.objects.select_related('worker').all()
+    return render(request, 'app/lista_implementos.html', {'implementos': implementos})
