@@ -1,7 +1,7 @@
 
 from..models import Permiso
 
-class HorarioPermiso:
+class PermisoFactory:
     def crear_permiso(self, empleado, day_inicio, day_fin, tipo_permiso):
         permoso = Permiso(
             worker = empleado,
