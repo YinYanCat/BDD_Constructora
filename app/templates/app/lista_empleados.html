@@ -1,0 +1,51 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 50px auto; padding: 20px;">
+    <h1>Lista de Empleados Registrados</h1>
+    
+    {% if empleados %}
+        <p>Total de empleados: <strong>{{ empleados.count }}</strong></p>
+        
+        <table border="1" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f0f0f0;">
+                    <th style="padding: 10px;">RUT</th>
+                    <th style="padding: 10px;">Nombre</th>
+                    <th style="padding: 10px;">Cargo</th>
+                    <th style="padding: 10px;">Salario</th>
+                    <th style="padding: 10px;">AFP</th>
+                    <th style="padding: 10px;">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for empleado in empleados %}
+                <tr>
+                    <td style="padding: 10px;">{{ empleado.rut }}</td>
+                    <td style="padding: 10px;">{{ empleado.first_name }} {{ empleado.last_name }}</td>
+                    <td style="padding: 10px;">{{ empleado.title }}</td>
+                    <td style="padding: 10px;">${{ empleado.salary }}</td>
+                    <td style="padding: 10px;">{{ empleado.afp.name }}</td>
+                    <td style="padding: 10px;">
+                        {% if empleado.is_active %}
+                            <span style="color: green;"> Activo</span>
+                        {% else %}
+                            <span style="color: red;"> Inactivo</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay empleados registrados aún.</p>
+    {% endif %}
+    
+    <p style="margin-top: 20px;">
+        <a href="{% url 'registro_empleado' %}" style="background: blue; color: white; padding: 10px 20px; text-decoration: none;">
+            ➕ Registrar Nuevo Empleado
+        </a>
+        <a href="{% url 'home' %}" style="margin-left: 10px;">🔙 Volver al Inicio</a>
+    </p>
+</div>
+{% endblock %}

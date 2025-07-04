@@ -7,7 +7,9 @@ from .forms.PermisoForm import PermisoForm
 from .factories.PermisoFactory import PermisoFactory
 from .forms.HorarioForm import HorarioForm
 from .factories.HorarioFactory import HorarioFactory
-from .models import Proyecto, EmpleadoProyecto, Implemento
+from .forms.EmpleadoForm import EmpleadoForm
+from .factories.EmpleadoFactory import EmpleadoFactory
+from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado
 
 
 @login_required
@@ -69,3 +71,28 @@ def registro_horario(request):
     else:
         form = HorarioForm()
     return render(request, 'PAGINA REGISTRO HORARIO', {'form': form})
+
+# @login_required  # Comentado para pruebas
+def registro_empleado(request):
+    if request.method == 'POST':
+        form = EmpleadoForm(request.POST)
+        if form.is_valid():
+            try:
+                empleado = EmpleadoFactory.crear_empleado(form.cleaned_data)
+                messages.success(
+                    request, 
+                    f'Empleado {empleado.first_name} {empleado.last_name} registrado exitosamente!'
+                )
+                return redirect('registro_empleado')
+            except Exception as e:
+                messages.error(request, f'Error al registrar empleado: {str(e)}')
+        else:
+            messages.error(request, 'Por favor corrija los errores del formulario.')
+    else:
+        form = EmpleadoForm()
+    
+    return render(request, 'app/registro_empleado.html', {'form': form})
+
+def lista_empleados(request):
+    empleados = Empleado.objects.select_related('afp').all()
+    return render(request, 'app/lista_empleados.html', {'empleados': empleados})

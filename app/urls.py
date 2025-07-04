@@ -8,4 +8,6 @@ urlpatterns = [
     path('proyecto/<int:proyecto_id>/empleados/', proyecto_empleados, name='proyecto_empleados'),
     path('implementos/', lista_implementos, name='lista_implementos'),
     path('registro_horario/', registro_horario, name='registro horario'),
+    path('registro_empleado/', registro_empleado, name='registro_empleado'),
+    path('lista_empleados/', lista_empleados, name='lista_empleados'),
 ]
