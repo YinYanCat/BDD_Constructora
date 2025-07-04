@@ -9,6 +9,8 @@ from .forms.HorarioForm import HorarioForm
 from .factories.HorarioFactory import HorarioFactory
 from .forms.EmpleadoForm import EmpleadoForm
 from .factories.EmpleadoFactory import EmpleadoFactory
+from .forms.EmpleadoProyectoForm import EmpleadoProyectoForm
+from .factories.EmpleadoProyectoFactory import EmpleadoProyectoFactory
 from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado
 
 
@@ -96,3 +98,35 @@ def registro_empleado(request):
 def lista_empleados(request):
     empleados = Empleado.objects.select_related('afp').all()
     return render(request, 'app/lista_empleados.html', {'empleados': empleados})
+
+def asignar_empleado_proyecto(request):
+    if request.method == 'POST':
+        form = EmpleadoProyectoForm(request.POST)
+        if form.is_valid():
+            try:
+                factory = EmpleadoProyectoFactory()
+                asignacion = factory.asignar_empleado_proyecto(
+                    worker=form.cleaned_data['worker'],
+                    proyect=form.cleaned_data['proyect'],
+                    position=form.cleaned_data['position'],
+                    bonus_pay=form.cleaned_data['bonus_pay']
+                )
+                messages.success(
+                    request,
+                    f'Empleado {asignacion.worker.first_name} {asignacion.worker.last_name} '
+                    f'asignado exitosamente al proyecto {asignacion.proyect.name} '
+                    f'como {asignacion.position}'
+                )
+                return redirect('asignar_empleado_proyecto')
+            except Exception as e:
+                messages.error(request, f'Error al asignar empleado: {str(e)}')
+        else:
+            messages.error(request, 'Por favor corrija los errores del formulario.')
+    else:
+        form = EmpleadoProyectoForm()
+    
+    return render(request, 'app/asignar_empleado_proyecto.html', {'form': form})
+
+def lista_asignaciones(request):
+    asignaciones = EmpleadoProyecto.objects.select_related('worker', 'proyect').all()
+    return render(request, 'app/lista_asignaciones.html', {'asignaciones': asignaciones})
