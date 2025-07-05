@@ -7,7 +7,7 @@ from .forms.PermisoForm import PermisoForm
 from .factories.PermisoFactory import PermisoFactory
 from .forms.HorarioForm import HorarioForm
 from .factories.HorarioFactory import HorarioFactory
-from .models import Proyecto, EmpleadoProyecto, Implemento
+from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, Horario
 
 
 @login_required
@@ -69,3 +69,11 @@ def registro_horario(request):
     else:
         form = HorarioForm()
     return render(request, 'PAGINA REGISTRO HORARIO', {'form': form})
+
+def lista_horario(request, rut=None):
+    if rut is not None:
+        horarios = Horario.objects.filter(worker = rut)
+        return render(request, 'app/lista_horario_empleado.html', {'data' : horarios})
+    else:
+        empleados = Empleado.objects.all()
+        return render(request, 'app/lista_horario.html', {'data':empleados})

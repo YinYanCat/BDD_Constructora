@@ -37,6 +37,9 @@ class Empleado(models.Model):
     is_active = models.BooleanField(null=False)
     afp = models.ForeignKey(AFP, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return f'{self.rut} - {self.first_name} {self.last_name}'
+
 class Horario(models.Model):
     DAYS_OF_WEEK = [
         ('MON', 'Monday'),
