@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Horarios</title>
+
+    <!--<link rel="stylesheet" href="{% static 'app/css/lista_horario.css' %}">-->
+
+</head>
+    <body>
+        <div>
+            <section>
+                <h1>Lista de Horarios</h1>
+                {% for empleado in data %}
+                    <form method="get" action="{% url 'lista_horario_empleado' empleado.rut %}">
+                        <button type="submit">{{ empleado.first_name }} {{ empleado.last_name }}</button>
+                    </form>
+                {% endfor %}
+            </section>
+        </div>
+    </body>
+</html>

@@ -7,11 +7,12 @@ from .forms.PermisoForm import PermisoForm
 from .factories.PermisoFactory import PermisoFactory
 from .forms.HorarioForm import HorarioForm
 from .factories.HorarioFactory import HorarioFactory
+
 from .forms.EmpleadoForm import EmpleadoForm
 from .factories.EmpleadoFactory import EmpleadoFactory
 from .forms.EmpleadoProyectoForm import EmpleadoProyectoForm
 from .factories.EmpleadoProyectoFactory import EmpleadoProyectoFactory
-from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado
+from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, Horario
 
 
 @login_required
@@ -130,3 +131,32 @@ def asignar_empleado_proyecto(request):
 def lista_asignaciones(request):
     asignaciones = EmpleadoProyecto.objects.select_related('worker', 'proyect').all()
     return render(request, 'app/lista_asignaciones.html', {'asignaciones': asignaciones})
+  
+def lista_horario(request, rut=None):
+    if rut is not None:
+        horarios = Horario.objects.filter(worker = rut)
+        return render(request, 'app/lista_horario_empleado.html', {'data' : horarios})
+    else:
+        empleados = Empleado.objects.all()
+        return render(request, 'app/lista_horario.html', {'data':empleados})
+    
+def lista_empleados_dia(request, day_of_week=None):
+    DAYS_OF_WEEK = [
+        ('MON', 'Lunes'),
+        ('TUES', 'Martes'),
+        ('WED', 'Miércoles'),
+        ('THU', 'Jueves'),
+        ('FRI', 'Viernes'),
+        ('SAT', 'Sábado'),
+        ('SUN', 'Domingo'),
+    ]
+    empleados = []
+    if day_of_week is not None:
+        empleados = Empleado.objects.filter(horario__day_of_week=day_of_week).distinct()
+
+    return render(request, 'app/lista_empleados_dia.html', {
+        'data': empleados,
+        'day': day_of_week,
+        'days': DAYS_OF_WEEK,
+    })
+
