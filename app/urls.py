@@ -11,4 +11,6 @@ urlpatterns = [
 
     path('lista_horario', lista_horario, name='lista_horario'),
     path('lista_horario/<str:rut>', lista_horario, name='lista_horario_empleado'),
+    path('lista_empleados_dia/', lista_empleados_dia, name='lista_empleados_dia'),
+    path('lista_empleados_dia/<str:day_of_week>', lista_empleados_dia, name='lista_empleados_dia'),
 ]

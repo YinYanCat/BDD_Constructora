@@ -77,3 +77,23 @@ def lista_horario(request, rut=None):
     else:
         empleados = Empleado.objects.all()
         return render(request, 'app/lista_horario.html', {'data':empleados})
+    
+def lista_empleados_dia(request, day_of_week=None):
+    DAYS_OF_WEEK = [
+        ('MON', 'Lunes'),
+        ('TUES', 'Martes'),
+        ('WED', 'Miércoles'),
+        ('THU', 'Jueves'),
+        ('FRI', 'Viernes'),
+        ('SAT', 'Sábado'),
+        ('SUN', 'Domingo'),
+    ]
+    empleados = []
+    if day_of_week is not None:
+        empleados = Empleado.objects.filter(horario__day_of_week=day_of_week).distinct()
+
+    return render(request, 'app/lista_empleados_dia.html', {
+        'data': empleados,
+        'day': day_of_week,
+        'days': DAYS_OF_WEEK,
+    })
