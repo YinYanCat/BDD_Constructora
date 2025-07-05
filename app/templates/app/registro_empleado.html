@@ -1,0 +1,93 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 50px auto; padding: 20px;">
+    <h1>Registro de Nuevo Empleado</h1>
+    
+    <!-- Mensajes -->
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: green; color: white; padding: 10px; margin: 10px 0;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Errores -->
+    {% if form.non_field_errors %}
+        <div style="background: red; color: white; padding: 10px; margin: 10px 0;">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <p>
+            <label>{{ form.rut.label }}:</label><br>
+            {{ form.rut }}
+            {% if form.rut.errors %}<br><span style="color: red;">{{ form.rut.errors }}</span>{% endif %}
+        </p>
+        
+        <p>
+            <label>{{ form.first_name.label }}:</label><br>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}<br><span style="color: red;">{{ form.first_name.errors }}</span>{% endif %}
+        </p>
+        
+        <p>
+            <label>{{ form.last_name.label }}:</label><br>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}<br><span style="color: red;">{{ form.last_name.errors }}</span>{% endif %}
+        </p>
+        
+        <p>
+            <label>{{ form.title.label }}:</label><br>
+            {{ form.title }}
+            {% if form.title.errors %}<br><span style="color: red;">{{ form.title.errors }}</span>{% endif %}
+        </p>
+        
+        <p>
+            <label>{{ form.salary.label }}:</label><br>
+            {{ form.salary }}
+            {% if form.salary.errors %}<br><span style="color: red;">{{ form.salary.errors }}</span>{% endif %}
+        </p>
+        
+        <p>
+            <label>{{ form.contract_date.label }}:</label><br>
+            {{ form.contract_date }}
+            {% if form.contract_date.errors %}<br><span style="color: red;">{{ form.contract_date.errors }}</span>{% endif %}
+        </p>
+        
+        <p>
+            <label>{{ form.phone.label }}:</label><br>
+            {{ form.phone }}
+            {% if form.phone.errors %}<br><span style="color: red;">{{ form.phone.errors }}</span>{% endif %}
+        </p>
+        
+        <p>
+            <label>{{ form.email.label }}:</label><br>
+            {{ form.email }}
+            {% if form.email.errors %}<br><span style="color: red;">{{ form.email.errors }}</span>{% endif %}
+        </p>
+        
+        <p>
+            <label>{{ form.afp.label }}:</label><br>
+            {{ form.afp }}
+            {% if form.afp.errors %}<br><span style="color: red;">{{ form.afp.errors }}</span>{% endif %}
+        </p>
+        
+        <p>
+            {{ form.is_active }} {{ form.is_active.label }}
+            {% if form.is_active.errors %}<br><span style="color: red;">{{ form.is_active.errors }}</span>{% endif %}
+        </p>
+        
+        <p>
+            <button type="submit" style="background: rgb(5, 146, 0); color: white; padding: 10px 20px; border: none;">
+                Registrar Empleado
+            </button>
+            <a href="{% url 'home' %}" style="margin-left: 10px;">Volver</a>
+        </p>
+    </form>
+</div>
+{% endblock %}
