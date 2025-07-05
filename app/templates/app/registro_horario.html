@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Horario</title>
+</head>
+<body>
+    <!-- Mensajes -->
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: green; color: white; padding: 10px; margin: 10px 0;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Errores generales del formulario -->
+    {% if form.non_field_errors %}
+        <div style="background: red; color: white; padding: 10px; margin: 10px 0;">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+
+        <p>
+            <label>{{ form.worker.label }}:</label><br>
+            {{ form.worker }}
+            {% if form.worker.errors %}<br><span style="color: red;">{{ form.worker.errors }}</span>{% endif %}
+        </p>
+
+        <p>
+            <label>{{ form.day_of_week.label }}:</label><br>
+            {{ form.day_of_week }}
+            {% if form.day_of_week.errors %}<br><span style="color: red;">{{ form.day_of_week.errors }}</span>{% endif %}
+        </p>
+
+        <p>
+            <label>{{ form.start.label }}:</label><br>
+            {{ form.start }}
+            {% if form.start.errors %}<br><span style="color: red;">{{ form.start.errors }}</span>{% endif %}
+        </p>
+
+        <p>
+            <label>{{ form.end.label }}:</label><br>
+            {{ form.end }}
+            {% if form.end.errors %}<br><span style="color: red;">{{ form.end.errors }}</span>{% endif %}
+        </p>
+
+        <p>
+            <button type="submit" style="background: rgb(5, 146, 0); color: white; padding: 10px 20px; border: none;">
+                Registrar Horario
+            </button>
+            <a href="{% url 'home' %}" style="margin-left: 10px;">Volver</a>
+        </p>
+    </form>
+</body>
+</html>

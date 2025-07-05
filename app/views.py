@@ -67,13 +67,12 @@ def registro_horario(request):
                     data['worker'], data['day_of_week'], data['start'], data['end']
                 )
                 messages.success(request, 'Horario creado con exito.')
-                form = HorarioForm()
                 return redirect('registro horario')
             except Exception as e:
                 form.add_error(None, str(e))
     else:
         form = HorarioForm()
-    return render(request, 'PAGINA REGISTRO HORARIO', {'form': form})
+    return render(request, 'app/registro_horario.html', {'form': form})
 
 # @login_required  # Comentado para pruebas
 def registro_empleado(request):

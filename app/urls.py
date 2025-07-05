@@ -14,6 +14,7 @@ urlpatterns = [
     path('asignar_empleado_proyecto/', asignar_empleado_proyecto, name='asignar_empleado_proyecto'),
     path('lista_asignaciones/', lista_asignaciones, name='lista_asignaciones'),
   
+    path('registro_horario', registro_horario, name='registro_horario'),
     path('lista_horario', lista_horario, name='lista_horario'),
     path('lista_horario/<str:rut>', lista_horario, name='lista_horario_empleado'),
     path('lista_empleados_dia/', lista_empleados_dia, name='lista_empleados_dia'),
