@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Vehiculo</title>
+</head>
+<body>
+    <!-- Mensajes -->
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: green; color: white; padding: 10px; margin: 10px 0;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Errores generales del formulario -->
+    {% if form.non_field_errors %}
+        <div style="background: red; color: white; padding: 10px; margin: 10px 0;">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+
+        <p>
+            <label>{{ form.name.label }}:</label><br>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <br><span style="color: red;">{{ form.name.errors }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <label>{{ form.start_date.label }}:</label><br>
+            {{ form.start_date }}
+            {% if form.start_date.errors %}
+                <br><span style="color: red;">{{ form.start_date.errors }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <label>{{ form.end_date.label }}:</label><br>
+            {{ form.end_date }}
+            {% if form.end_date.errors %}
+                <br><span style="color: red;">{{ form.end_date.errors }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <label>{{ form.budget.label }}:</label><br>
+            {{ form.budget }}
+            {% if form.budget.errors %}
+                <br><span style="color: red;">{{ form.budget.errors }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <label>{{ form.description.label }}:</label><br>
+            {{ form.description }}
+            {% if form.description.errors %}
+                <br><span style="color: red;">{{ form.description.errors }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <button type="submit" style="background: rgb(5, 146, 0); color: white; padding: 10px 20px; border: none;">
+                Registrar Proyecto
+            </button>
+            <a href="{% url 'home' %}" style="margin-left: 10px;">Volver</a>
+        </p>
+    </form>
+</body>
+</html>

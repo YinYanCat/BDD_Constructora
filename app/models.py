@@ -69,6 +69,9 @@ class Proyecto(models.Model):
     description = models.CharField(null=False, max_length=200)
     is_active = models.BooleanField(default=True)  # ← esto te permite marcarlo como activo/inactivo
 
+    def __str__(self):
+        return f'({self.id}) {self.name}'
+
 class EmpleadoProyecto(models.Model):
     worker = models.ForeignKey(Empleado, null=False, on_delete=models.PROTECT)
     proyect = models.ForeignKey(Proyecto, null=False, on_delete=models.PROTECT)

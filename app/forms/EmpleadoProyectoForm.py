@@ -1,5 +1,7 @@
 from django import forms
 from ..models import EmpleadoProyecto, Empleado, Proyecto
+from typing import cast
+from django.forms.models import ModelChoiceField
 
 
 class EmpleadoProyectoForm(forms.ModelForm):
@@ -37,6 +39,15 @@ class EmpleadoProyectoForm(forms.ModelForm):
             'bonus_pay': 'Bonificación Adicional',
         }
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['worker'] = cast(ModelChoiceField, self.fields['worker'])
+        self.fields['worker'].queryset = Empleado.objects.filter(is_active=True)
+
+        self.fields['proyect'] = cast(ModelChoiceField, self.fields['proyect'])
+        self.fields['proyect'].queryset = Proyecto.objects.filter(is_active=True)
+
+
     def clean(self):
         cleaned_data = super().clean()
         worker = cleaned_data.get('worker')

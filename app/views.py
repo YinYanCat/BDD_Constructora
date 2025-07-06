@@ -8,11 +8,13 @@ from .forms.PermisoForm import PermisoForm
 from .factories.PermisoFactory import PermisoFactory
 from .forms.HorarioForm import HorarioForm
 from .factories.HorarioFactory import HorarioFactory
+from .factories.ProyectoFactory import ProyectoFactory
 
 from .forms.EmpleadoForm import EmpleadoForm
 from .factories.EmpleadoFactory import EmpleadoFactory
 from .factories.VehiculoFactory import VehiculoFactory
 from .forms.VehiculoForm import VehiculoForm
+from .forms.ProyectoForm import ProyectoForm
 from .forms.EmpleadoProyectoForm import EmpleadoProyectoForm
 from .factories.EmpleadoProyectoFactory import EmpleadoProyectoFactory
 from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, AsignacionVehiculo
@@ -39,12 +41,31 @@ def registro_permiso(request):
                 )
                 messages.success(request, 'Permiso creado con exito.')
                 form = PermisoForm()
-                return redirect('registro permiso')
+                return redirect('registro_permiso')
             except Exception as e:
                 form.add_error(None, str(e))
     else:
         form = PermisoForm()
     return render(request, 'PAGINA REGISTRO PERMISO', {'form': form}) #LLAMAR AL HTML CORRESPONDIENTE
+
+def lista_proyecto(request, activos = 'true'):
+    if activos == 'true':
+        proyectos = Proyecto.objects.filter(is_active = True)
+        filter = 'Solo activos'
+    elif activos == 'false':
+        proyectos = Proyecto.objects.all()
+        filter = 'Todos'
+    else:
+        proyectos = []
+        filter = ''
+    return render(request, 'app/lista_proyecto.html', {'proyectos': proyectos,
+                                                       'filter' : filter})
+
+def toggle_proyecto(request, proyecto_id):
+    proyecto = get_object_or_404(Proyecto, id = proyecto_id)
+    proyecto.is_active = not proyecto.is_active
+    proyecto.save()
+    return redirect('lista_proyecto')
 
 def proyecto_empleados(request, proyecto_id):
     proyecto = get_object_or_404(Proyecto, id=proyecto_id)
@@ -70,7 +91,7 @@ def registro_horario(request):
                     data['worker'], data['day_of_week'], data['start'], data['end']
                 )
                 messages.success(request, 'Horario creado con exito.')
-                return redirect('registro horario')
+                return redirect('registro_horario')
             except Exception as e:
                 form.add_error(None, str(e))
     else:
@@ -173,7 +194,7 @@ def registrar_vehiculo(request):
                     data['patente'], data['modelo'], data['año'], data['tipo'], data['estado']
                 )
                 messages.success(request, 'Vehiculo registrado con exito.')
-                return redirect('registro vehiculo')
+                return redirect('registro_vehiculo')
             except Exception as e:
                 form.add_error(None, str(e))
     else:
@@ -243,3 +264,21 @@ def toggle_empleado_status(request, empleado_rut):
         return redirect('lista_empleados')
     
     return render(request, 'app/confirmar_toggle_empleado.html', {'empleado': empleado})
+
+def registro_proyecto(request):
+    if request.method == 'POST':
+        form = ProyectoForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            factory = ProyectoFactory()
+            try: 
+                factory.crear_proyecto(
+                    data['name'], data['start_date'], data['end_date'], data['budget'], data['description']
+                )
+                messages.success(request, 'Proyecto registrado con exito.')
+                return redirect('registro_proyecto')
+            except Exception as e:
+                form.add_error(None, str(e))
+    else:
+        form = ProyectoForm()
+    return render(request, 'app/registro_proyecto.html', {'form': form})
