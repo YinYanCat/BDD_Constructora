@@ -19,4 +19,10 @@ urlpatterns = [
     path('lista_horario/<str:rut>', lista_horario, name='lista_horario_empleado'),
     path('lista_empleados_dia/', lista_empleados_dia, name='lista_empleados_dia'),
     path('lista_empleados_dia/<str:day_of_week>', lista_empleados_dia, name='lista_empleados_dia'),
+
+    path('registrar_vehiculo', registrar_vehiculo, name='registrar_vehiculo'),
+    path('vehiculos/', lista_vehiculo, name='lista_vehiculo'),
+    path('vehiculos/<str:vehiculo_id>/asignar/', asignar_empleado, name='asignar_empleado'),
+    path('vehiculos/<str:vehiculo_id>/quitar/<str:empleado_id>/', quitar_empleado, name='quitar_empleado'),
+
 ]

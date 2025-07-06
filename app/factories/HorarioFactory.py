@@ -10,6 +10,7 @@ class HorarioFactory:
                 start = h_inicio,
                 end = h_fin
             )
+            horario.save()
+            return horario
         except IntegrityError:
             raise ValueError("Este empleado ya tiene un horario registrado para ese día.")
-        return horario

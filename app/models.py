@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from django.core.validators import MinValueValidator
+from datetime import date
+from django.core.exceptions import ValidationError
 
 class Usuario(AbstractUser):
     #Django proporciona un abstracto de usuario
@@ -30,10 +32,10 @@ class Empleado(models.Model):
     rut = models.CharField(primary_key=True, max_length=16)
     first_name = models.CharField(null=False, max_length=200)
     last_name = models.CharField(null=False, max_length=200)
-    salary = models.FloatField(null=False)    
+    salary = models.FloatField(null=False, validators=[MinValueValidator(0)])    
     contract_date = models.DateField()
     phone = models.CharField(null=False, max_length=16)
-    email = models.CharField(null=False, max_length=200)
+    email = models.CharField(null=False, unique=True, max_length=200)
     is_active = models.BooleanField(null=False)
     afp = models.ForeignKey(AFP, on_delete=models.PROTECT)
 
@@ -86,12 +88,12 @@ class EmpleadoCapacitacion(models.Model):
 
 class FacturaEmpleado(models.Model):
     worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)
-    total = models.FloatField()
+    total = models.FloatField(validators=[MinValueValidator(0)])
     detail = models.TextField()
 
 class FacturaCapacitacion(models.Model):
     id_capacitacion = models.ForeignKey(Capacitacion, on_delete=models.CASCADE)
-    total = models.FloatField()
+    total = models.FloatField(validators=[MinValueValidator(0)])
     detail = models.TextField()
 
 class Vehiculo(models.Model):
@@ -100,6 +102,11 @@ class Vehiculo(models.Model):
     year = models.PositiveIntegerField()
     status = models.CharField(max_length=50)
     vtype = models.CharField(max_length=50)
+
+    def clean(self):
+        super().clean()
+        if self.year > date.today().year:
+            raise ValidationError({'year': f'El año no puede ser mayor al actual ({date.today().year})'})
 
 class AsignacionVehiculo(models.Model):
     vehicle = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
