@@ -24,5 +24,6 @@ urlpatterns = [
     path('vehiculos/', lista_vehiculo, name='lista_vehiculo'),
     path('vehiculos/<str:vehiculo_id>/asignar/', asignar_empleado, name='asignar_empleado'),
     path('vehiculos/<str:vehiculo_id>/quitar/<str:empleado_id>/', quitar_empleado, name='quitar_empleado'),
+    path('empleado/<str:empleado_rut>/toggle/', toggle_empleado_status, name='toggle_empleado_status'),
 
 ]

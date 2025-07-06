@@ -1,0 +1,142 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="confirmation-card">
+        <h2>Confirmar Acción</h2>
+        
+        {% if empleado.is_active %}
+            <div class="warning-message">
+                <h3> Desactivar Empleado</h3>
+                <p>¿Está seguro que desea <strong>desactivar</strong> al empleado:</p>
+                <div class="empleado-info">
+                    <p><strong>{{ empleado.first_name }} {{ empleado.last_name }}</strong></p>
+                    <p>RUT: {{ empleado.rut }}</p>
+                    <p>Email: {{ empleado.email }}</p>
+                </div>
+                
+                <div class="warning-details">
+                    <h4>Esta acción eliminará:</h4>
+                    <ul>
+                        <li> Todas las asignaciones de vehículos</li>
+                        <li> Todos los implementos asignados</li>
+                    </ul>
+                    <p><strong>Esta acción no se puede deshacer.</strong></p>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <form method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Confirmar Desactivación</button>
+                </form>
+                <a href="{% url 'lista_empleados' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        {% else %}
+            <div class="success-message">
+                <h3> Activar Empleado</h3>
+                <p>¿Está seguro que desea <strong>activar</strong> al empleado:</p>
+                <div class="empleado-info">
+                    <p><strong>{{ empleado.first_name }} {{ empleado.last_name }}</strong></p>
+                    <p>RUT: {{ empleado.rut }}</p>
+                    <p>Email: {{ empleado.email }}</p>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <form method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Confirmar Activación</button>
+                </form>
+                <a href="{% url 'lista_empleados' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+    
+    .confirmation-card {
+        background: white;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .warning-message {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+    
+    .success-message {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+    
+    .empleado-info {
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .empleado-info p {
+        margin: 5px 0;
+    }
+    
+    .warning-details {
+        margin-top: 15px;
+    }
+    
+    .warning-details ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+    
+    .actions {
+        text-align: center;
+        margin-top: 30px;
+    }
+    
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 0 10px;
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    .btn:hover {
+        opacity: 0.9;
+    }
+</style>
+{% endblock %}

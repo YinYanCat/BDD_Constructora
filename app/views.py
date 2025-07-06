@@ -15,7 +15,7 @@ from .factories.VehiculoFactory import VehiculoFactory
 from .forms.VehiculoForm import VehiculoForm
 from .forms.EmpleadoProyectoForm import EmpleadoProyectoForm
 from .factories.EmpleadoProyectoFactory import EmpleadoProyectoFactory
-from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, Horario, Vehiculo, AsignacionVehiculo
+from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, AsignacionVehiculo
 
 
 @login_required
@@ -222,3 +222,24 @@ def quitar_empleado(request, vehiculo_id, empleado_id):
         asignacion.delete()
         messages.success(request, 'Empleado quitado correctamente.')
     return redirect('lista_vehiculo')
+
+def toggle_empleado_status(request, empleado_rut):
+    
+    empleado = get_object_or_404(Empleado, rut=empleado_rut)
+    
+    if request.method == 'POST':
+        if empleado.is_active:
+            # Desactivar: eliminar asignaciones de vehículos e implementos
+            AsignacionVehiculo.objects.filter(worker=empleado).delete()
+            Implemento.objects.filter(worker=empleado).delete()
+            empleado.is_active = False
+            messages.success(request, 'Agente desactivado exitosamente')
+        else:
+            # Activar empleado
+            empleado.is_active = True
+            messages.success(request, f'Empleado {empleado.first_name} {empleado.last_name} activado correctamente.')
+        
+        empleado.save()
+        return redirect('lista_empleados')
+    
+    return render(request, 'app/confirmar_toggle_empleado.html', {'empleado': empleado})

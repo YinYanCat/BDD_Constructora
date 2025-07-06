@@ -16,11 +16,12 @@
                     <th style="padding: 10px;">Salario</th>
                     <th style="padding: 10px;">AFP</th>
                     <th style="padding: 10px;">Estado</th>
+                    <th style="padding: 10px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% for empleado in empleados %}
-                <tr>
+                <tr {% if not empleado.is_active %}style="background-color: #d9d9d9; color: #666;"{% endif %}>
                     <td style="padding: 10px;">{{ empleado.rut }}</td>
                     <td style="padding: 10px;">{{ empleado.first_name }} {{ empleado.last_name }}</td>
                     <td style="padding: 10px;">{{ empleado.title }}</td>
@@ -28,9 +29,22 @@
                     <td style="padding: 10px;">{{ empleado.afp.name }}</td>
                     <td style="padding: 10px;">
                         {% if empleado.is_active %}
-                            <span style="color: green;"> Activo</span>
+                            <span style="color: green; font-weight: bold;"> Activo</span>
                         {% else %}
-                            <span style="color: red;"> Inactivo</span>
+                            <span style="color: #7d7d7d; font-weight: bold;"> Inactivo</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 10px;">
+                        {% if empleado.is_active %}
+                            <a href="{% url 'toggle_empleado_status' empleado.rut %}" 
+                               style="background: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
+                                 Desactivar
+                            </a>
+                        {% else %}
+                            <a href="{% url 'toggle_empleado_status' empleado.rut %}" 
+                               style="background: #28a745; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
+                                 Activar
+                            </a>
                         {% endif %}
                     </td>
                 </tr>
@@ -42,10 +56,10 @@
     {% endif %}
     
     <p style="margin-top: 20px;">
-        <a href="{% url 'registro_empleado' %}" style="background: blue; color: white; padding: 10px 20px; text-decoration: none;">
-            ➕ Registrar Nuevo Empleado
+        <a href="{% url 'registro_empleado' %}" style="background: rgb(228, 228, 228); color: rgb(0, 0, 0); padding: 10px 20px; text-decoration: none;">
+             Registrar Nuevo Empleado
         </a>
-        <a href="{% url 'home' %}" style="margin-left: 10px;">🔙 Volver al Inicio</a>
+        <a href="{% url 'home' %}" style="margin-left: 10px;"> Volver al Inicio</a>
     </p>
 </div>
 {% endblock %}
