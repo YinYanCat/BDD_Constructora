@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Lista de Vehículos</h1>
+    {% for item in asignaciones %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
+            <h2>{{ item.vehiculo.patent }}</h2>
+
+            <h3>Empleados Asignados:</h3>
+            <ul>
+                {% for empleado in item.asignados %}
+                    <li>
+                        {{ empleado.first_name }} {{ empleado.last_name }}
+                        <form method="POST" action="{% url 'quitar_empleado' item.vehiculo.patent empleado.rut %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">Quitar</button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li>No hay empleados asignados</li>
+                {% endfor %}
+            </ul>
+
+            <h3>Asignar nuevo empleado:</h3>
+            <form method="POST" action="{% url 'asignar_empleado' item.vehiculo.patent %}">
+                {% csrf_token %}
+                <select name="empleado_id" required>
+                    <option value="">-- Selecciona un empleado --</option>
+                    {% for empleado in item.no_asignados %}
+                        <option value="{{ empleado.rut }}">{{ empleado.first_name }} {{ empleado.last_name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Asignar</button>
+            </form>
+        </div>
+    {% endfor %}
+</body>
+</html>

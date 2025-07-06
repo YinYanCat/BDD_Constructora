@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 
 from .forms.PermisoForm import PermisoForm
@@ -10,9 +11,11 @@ from .factories.HorarioFactory import HorarioFactory
 
 from .forms.EmpleadoForm import EmpleadoForm
 from .factories.EmpleadoFactory import EmpleadoFactory
+from .factories.VehiculoFactory import VehiculoFactory
+from .forms.VehiculoForm import VehiculoForm
 from .forms.EmpleadoProyectoForm import EmpleadoProyectoForm
 from .factories.EmpleadoProyectoFactory import EmpleadoProyectoFactory
-from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, Horario
+from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, Horario, Vehiculo, AsignacionVehiculo
 
 
 @login_required
@@ -136,7 +139,7 @@ def lista_horario(request, rut=None):
         horarios = Horario.objects.filter(worker = rut)
         return render(request, 'app/lista_horario_empleado.html', {'data' : horarios})
     else:
-        empleados = Empleado.objects.all()
+        empleados = Empleado.objects.filter(is_active=True)
         return render(request, 'app/lista_horario.html', {'data':empleados})
     
 def lista_empleados_dia(request, day_of_week=None):
@@ -151,7 +154,7 @@ def lista_empleados_dia(request, day_of_week=None):
     ]
     empleados = []
     if day_of_week is not None:
-        empleados = Empleado.objects.filter(horario__day_of_week=day_of_week).distinct()
+        empleados = Empleado.objects.filter(horario__day_of_week=day_of_week, is_active = True).distinct()
 
     return render(request, 'app/lista_empleados_dia.html', {
         'data': empleados,
@@ -159,3 +162,63 @@ def lista_empleados_dia(request, day_of_week=None):
         'days': DAYS_OF_WEEK,
     })
 
+def registrar_vehiculo(request):
+    if request.method == 'POST':
+        form = VehiculoForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            factory = VehiculoFactory()
+            try: 
+                factory.crear_vehiculo(
+                    data['patente'], data['modelo'], data['año'], data['tipo'], data['estado']
+                )
+                messages.success(request, 'Vehiculo registrado con exito.')
+                return redirect('registro vehiculo')
+            except Exception as e:
+                form.add_error(None, str(e))
+    else:
+        form = VehiculoForm()
+    return render(request, 'app/registro_vehiculo.html', {'form': form})
+
+
+def lista_vehiculo(request):
+    vehiculos = Vehiculo.objects.all()
+    empleados_activos = Empleado.objects.filter(is_active=True)
+
+    asignaciones = []
+
+    for vehiculo in vehiculos:
+        asignados_ids = AsignacionVehiculo.objects.filter(
+            vehicle=vehiculo
+        ).values_list('worker', flat=True)
+
+        asignados = empleados_activos.filter(rut__in=asignados_ids)
+        no_asignados = empleados_activos.exclude(rut__in=asignados_ids)
+
+        asignaciones.append({
+            'vehiculo': vehiculo,
+            'asignados': asignados,
+            'no_asignados': no_asignados
+        })
+
+    return render(request, 'app/lista_vehiculos.html', {
+        'asignaciones': asignaciones
+    })
+
+def asignar_empleado(request, vehiculo_id):
+    vehiculo = get_object_or_404(Vehiculo, patent=vehiculo_id)
+    empleado_id = request.POST.get('empleado_id')
+
+    if empleado_id:
+        empleado = get_object_or_404(Empleado, rut=empleado_id)
+        AsignacionVehiculo.objects.get_or_create(vehicle=vehiculo, worker=empleado)
+        messages.success(request, f'{empleado.first_name} asignado a {vehiculo.patent}.')
+    return redirect('lista_vehiculo')
+
+@require_POST
+def quitar_empleado(request, vehiculo_id, empleado_id):
+    asignacion = AsignacionVehiculo.objects.filter(vehicle_id=vehiculo_id, worker_id=empleado_id)
+    if asignacion.exists():
+        asignacion.delete()
+        messages.success(request, 'Empleado quitado correctamente.')
+    return redirect('lista_vehiculo')
