@@ -33,6 +33,7 @@ urlpatterns = [
 
     path('registrar_capacitacion/', registrar_capacitacion, name='registrar_capacitacion'),
     path('registrar_factura/', registrar_factura, name='registrar_factura'),
+    path('pagos/', pagos_view, name='vista_pagos'),
 
     
 

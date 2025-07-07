@@ -1,0 +1,108 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<h1>Gestión de Pagos</h1>
+
+{% if mensaje %}
+    <p style="color: green;">{{ mensaje }}</p>
+{% endif %}
+
+<!-- 1. Crear pago base -->
+<h2>1. Crear nuevo pago</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ pago_form.as_p }}
+    <button type="submit" name="crear_pago">Crear Pago</button>
+</form>
+
+<hr>
+
+<!-- 2. Asignar tipo de pago -->
+<h2>2. Asignar tipo de pago</h2>
+<form method="post">
+    {% csrf_token %}
+    <label>Selecciona el pago base:</label>
+    <select name="pago_id" required>
+        <option value="" disabled selected>-- Selecciona un pago --</option>
+        {% for pago in pagos_base %}
+            <option value="{{ pago.id }}">{{ pago.id }} - {{ pago.descripcion }} - {{ pago.fecha }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Selecciona el tipo:</label>
+    <select name="tipo_form" required onchange="this.form.submit()">
+        <option value="" {% if not tipo_form_activo %}selected{% endif %}>-- Elegir tipo --</option>
+        <option value="empleado" {% if tipo_form_activo == 'empleado' %}selected{% endif %}>Empleado</option>
+        <option value="insumo" {% if tipo_form_activo == 'insumo' %}selected{% endif %}>Insumo</option>
+        <option value="vehiculo" {% if tipo_form_activo == 'vehiculo' %}selected{% endif %}>Vehículo</option>
+        <option value="implemento" {% if tipo_form_activo == 'implemento' %}selected{% endif %}>Implemento</option>
+    </select>
+
+    {% if tipo_pago_form %}
+        {{ tipo_pago_form.as_p }}
+        <button type="submit">Guardar Tipo</button>
+    {% endif %}
+</form>
+
+<hr>
+
+<!-- Filtro de pagos -->
+<h2>Filtrar pagos</h2>
+<form method="get">
+    <input type="text" name="q" placeholder="Buscar..." value="{{ query }}">
+    <select name="tipo">
+        <option value="" {% if tipo == '' %}selected{% endif %}>Todos</option>
+        <option value="empleado" {% if tipo == 'empleado' %}selected{% endif %}>Empleado</option>
+        <option value="insumo" {% if tipo == 'insumo' %}selected{% endif %}>Insumo</option>
+        <option value="vehiculo" {% if tipo == 'vehiculo' %}selected{% endif %}>Vehículo</option>
+        <option value="implemento" {% if tipo == 'implemento' %}selected{% endif %}>Implemento</option>
+    </select>
+    <button type="submit">Buscar</button>
+</form>
+
+<hr>
+
+<!-- Listado de pagos por tipo -->
+<h2>Pagos registrados</h2>
+
+{% if pagos_empleado %}
+    <h3>Empleado</h3>
+    <ul>
+        {% for p in pagos_empleado %}
+            <li>{{ p.pago.id }} - {{ p.pago.descripcion }} - {{ p.empleado.nombre }} - AFP: {{ p.afp.nombre }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if pagos_insumo %}
+    <h3>Insumo</h3>
+    <ul>
+        {% for p in pagos_insumo %}
+            <li>{{ p.pago.id }} - {{ p.pago.descripcion }} - Cap.: {{ p.capacitacion.name }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if pagos_vehiculo %}
+    <h3>Vehículo</h3>
+    <ul>
+        {% for p in pagos_vehiculo %}
+            <li>{{ p.pago.id }} - {{ p.pago.descripcion }} - Vehículo: {{ p.vehiculo.patent }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if pagos_implemento %}
+    <h3>Implemento</h3>
+    <ul>
+        {% for p in pagos_implemento %}
+            <li>{{ p.pago.id }} - {{ p.pago.descripcion }} - Implemento: {{ p.implemento.nombre }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if not pagos_empleado and not pagos_insumo and not pagos_vehiculo and not pagos_implemento %}
+    <p>No hay pagos registrados.</p>
+{% endif %}
+
+{% endblock %}

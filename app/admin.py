@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Proyecto, Empleado, EmpleadoProyecto, AFP, Implemento, Factura, Capacitacion
+from .models import Proyecto, Empleado, EmpleadoProyecto, AFP, Implemento, Factura, Capacitacion, Vehiculo, Pago, PagoEmpleado, PagoInsumoServicio, PagoVehiculo, PagoImplemento
 
 @admin.register(Empleado)
 class EmpleadoAdmin(admin.ModelAdmin):
@@ -40,3 +40,36 @@ class CapacitacionAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'institution', 'end_date', 'cert')
     search_fields = ('name', 'institution')
     list_filter = ('institution', 'end_date')
+
+@admin.register(Vehiculo)
+class VehiculoAdmin(admin.ModelAdmin):
+    list_display = ('patent', 'model', 'year', 'status', 'vtype')
+    search_fields = ('patent', 'model', 'status', 'vtype')
+    list_filter = ('status', 'vtype', 'year')
+
+@admin.register(Pago)
+class PagoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'descripcion', 'monto', 'fecha')
+    search_fields = ('descripcion',)
+    list_filter = ('fecha',)
+
+@admin.register(PagoEmpleado)
+class PagoEmpleadoAdmin(admin.ModelAdmin):
+    list_display = ('pago', 'empleado', 'afp')
+    search_fields = ('empleado__nombre', 'afp__nombre')
+    list_filter = ('afp',)
+
+@admin.register(PagoInsumoServicio)
+class PagoInsumoServicioAdmin(admin.ModelAdmin):
+    list_display = ('pago', 'capacitacion')
+    search_fields = ('capacitacion__nombre',)
+
+@admin.register(PagoVehiculo)
+class PagoVehiculoAdmin(admin.ModelAdmin):
+    list_display = ('pago', 'vehiculo')
+    search_fields = ('vehiculo__patent', 'vehiculo__model')
+
+@admin.register(PagoImplemento)
+class PagoImplementoAdmin(admin.ModelAdmin):
+    list_display = ('pago', 'implemento')
+    search_fields = ('implemento__nombre',)
