@@ -32,5 +32,5 @@ urlpatterns = [
     path('vehiculos/<str:vehiculo_id>/quitar/<str:empleado_id>/', quitar_empleado, name='quitar_empleado'),
 
     path('registro_permisos/', registro_permiso, name='registro_permisos'),
-
+    path('lista_permisos/', lista_permisos, name='lista_permisos'),
 ]
