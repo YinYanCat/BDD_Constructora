@@ -46,7 +46,7 @@ def registro_permiso(request):
                 form.add_error(None, str(e))
     else:
         form = PermisoForm()
-    return render(request, 'PAGINA REGISTRO PERMISO', {'form': form}) #LLAMAR AL HTML CORRESPONDIENTE
+    return render(request, 'app/registro_permiso.html', {'form': form}) #LLAMAR AL HTML CORRESPONDIENTE
 
 def lista_proyecto(request, activos = 'true'):
     if activos == 'true':
