@@ -17,7 +17,10 @@ from .forms.VehiculoForm import VehiculoForm
 from .forms.ProyectoForm import ProyectoForm
 from .forms.EmpleadoProyectoForm import EmpleadoProyectoForm
 from .factories.EmpleadoProyectoFactory import EmpleadoProyectoFactory
-from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, AsignacionVehiculo
+from .forms.CapacitacionForm import CapacitacionForm
+from .forms.FacturaForm import FacturaForm
+
+from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, AsignacionVehiculo, Capacitacion, Factura
 
 
 @login_required
@@ -282,3 +285,36 @@ def registro_proyecto(request):
     else:
         form = ProyectoForm()
     return render(request, 'app/registro_proyecto.html', {'form': form})
+
+def registrar_capacitacion(request):
+    if request.method == 'POST':
+        form = CapacitacionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('registrar_capacitacion')  # redirige a sí misma para que se actualice
+    else:
+        form = CapacitacionForm()
+
+    # Obtener todas las capacitaciones para mostrarlas
+    capacitaciones = Capacitacion.objects.all().order_by('-end_date')
+
+    return render(request, 'app/registrar_capacitacion.html', {
+        'form': form,
+        'capacitaciones': capacitaciones
+    })
+
+def registrar_factura(request):
+    if request.method == 'POST':
+        form = FacturaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('registrar_factura')  # redirige a sí misma
+    else:
+        form = FacturaForm()
+
+    facturas = Factura.objects.select_related('empleado', 'capacitacion').all().order_by('-id')
+
+    return render(request, 'app/registrar_factura.html', {
+        'form': form,
+        'facturas': facturas
+    })

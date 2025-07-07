@@ -89,15 +89,21 @@ class EmpleadoCapacitacion(models.Model):
     id_capacitacion = models.ForeignKey(Capacitacion, on_delete=models.CASCADE)
     aproved = models.BooleanField(default=False)
 
-class FacturaEmpleado(models.Model):
-    worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)
-    total = models.FloatField(validators=[MinValueValidator(0)])
-    detail = models.TextField()
+class Factura(models.Model):
+    ESTADOS = [
+        ('pendiente', 'Pendiente'),
+        ('pagada', 'Pagada'),
+        ('anulada', 'Anulada'),
+    ]
 
-class FacturaCapacitacion(models.Model):
-    id_capacitacion = models.ForeignKey(Capacitacion, on_delete=models.CASCADE)
-    total = models.FloatField(validators=[MinValueValidator(0)])
-    detail = models.TextField()
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    capacitacion = models.ForeignKey(Capacitacion, on_delete=models.CASCADE)
+    monto = models.FloatField(validators=[MinValueValidator(0)])
+    detalle = models.TextField()
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
+
+    def __str__(self):
+        return f"Factura {self.id} - {self.empleado.rut} - {self.capacitacion.id} - ${self.monto}"
 
 class Vehiculo(models.Model):
     patent = models.CharField(primary_key=True, max_length=10)
