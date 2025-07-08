@@ -1,1 +1,45 @@
-    <h1>HOLA AMIGUITOS</h1>
+{% extends "app/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Registrar Permiso</h2>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mt-2">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    <form method="post" class="mt-3">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.worker.label_tag }}
+            {{ form.worker }}
+            {% if form.worker.errors %}
+                <div class="text-danger">{{ form.worker.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.start.label_tag }}
+            {{ form.start }}
+            {% if form.start.errors %}
+                <div class="text-danger">{{ form.start.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.end.label_tag }}
+            {{ form.end }}
+            {% if form.end.errors %}
+                <div class="text-danger">{{ form.end.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.ptype.label_tag }}
+            {{ form.ptype }}
+            {% if form.ptype.errors %}
+                <div class="text-danger">{{ form.ptype.errors }}</div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Registrar</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

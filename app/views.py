@@ -20,6 +20,8 @@ from .factories.EmpleadoProyectoFactory import EmpleadoProyectoFactory
 
 from .factories.ProfesionFactory import ProfesionFactory
 from .forms.ProfesionForm import ProfesionForm
+from .factories.AFPFactory import AFPFactory
+from .forms.AFPForm import AFPForm
 
 from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, AsignacionVehiculo
 
@@ -306,3 +308,19 @@ def crear_profesion(request):
     else:
         form = ProfesionForm()
     return render(request, 'app/crear_profesion.html', {'form': form})
+
+def crear_afp(request):
+    if request.method == 'POST':
+        form = AFPForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            factory = AFPFactory()
+            try: 
+                factory.crear_afp(data['name'])
+                messages.success(request, 'AFP creada con éxito.')
+                return redirect('crear_afp')
+            except Exception as e:
+                form.add_error(None, str(e))
+    else:
+        form = AFPForm()
+    return render(request, 'app/crear_afp.html', {'form': form})

@@ -35,4 +35,6 @@ urlpatterns = [
     path('lista_permisos/', lista_permisos, name='lista_permisos'),
 
     path('crear_profesion/', crear_profesion, name='crear_profesion'),
+    
+    path('crear_afp/', crear_afp, name='crear_afp'),
 ]
