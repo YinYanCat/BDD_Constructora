@@ -27,6 +27,8 @@ class Cambio(models.Model):
 class AFP(models.Model):
     rut = models.CharField(primary_key=True, max_length=16)
     name = models.CharField(null=False, max_length=200)
+    def __str__(self):
+        return self.name
 
 class Empleado(models.Model):
     rut = models.CharField(primary_key=True, max_length=16)
@@ -154,3 +156,5 @@ class Permiso(models.Model):
 
 class Profesion(models.Model):
     name = models.CharField(max_length=200, unique=True)
+    def __str__(self):
+        return self.name

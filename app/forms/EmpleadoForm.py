@@ -60,6 +60,10 @@ class EmpleadoForm(forms.ModelForm):
             'afp': 'AFP',
             'profesion': 'Profesión'
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['afp'].queryset = AFP.objects.all()
     
     def clean_rut(self):
         rut = self.cleaned_data.get('rut')

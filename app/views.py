@@ -399,7 +399,7 @@ def pagos_view(request):
     }
 
     return render(request, 'app/pagos.html', context)
-=======
+
 def crear_profesion(request):
     if request.method == 'POST':
         form = ProfesionForm(request.POST)
@@ -423,7 +423,7 @@ def crear_afp(request):
             data = form.cleaned_data
             factory = AFPFactory()
             try: 
-                factory.crear_afp(data['name'])
+                factory.crear_afp(data['rut'], data['name'])
                 messages.success(request, 'AFP creada con éxito.')
                 return redirect('crear_afp')
             except Exception as e:
