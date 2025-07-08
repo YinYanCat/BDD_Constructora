@@ -85,20 +85,21 @@ class Capacitacion(models.Model):
     end_date = models.DateField()
     cert = models.CharField(max_length=100)
 
-class EmpleadoCapacitacion(models.Model):
-    worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)
-    id_capacitacion = models.ForeignKey(Capacitacion, on_delete=models.CASCADE)
-    aproved = models.BooleanField(default=False)
+class Factura(models.Model):
+    ESTADOS = [
+        ('pendiente', 'Pendiente'),
+        ('pagada', 'Pagada'),
+        ('anulada', 'Anulada'),
+    ]
 
-class FacturaEmpleado(models.Model):
-    worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)
-    total = models.FloatField(validators=[MinValueValidator(0)])
-    detail = models.TextField()
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    capacitacion = models.ForeignKey(Capacitacion, on_delete=models.CASCADE)
+    monto = models.FloatField(validators=[MinValueValidator(0)])
+    detalle = models.TextField()
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
 
-class FacturaCapacitacion(models.Model):
-    id_capacitacion = models.ForeignKey(Capacitacion, on_delete=models.CASCADE)
-    total = models.FloatField(validators=[MinValueValidator(0)])
-    detail = models.TextField()
+    def __str__(self):
+        return f"Factura {self.id} - {self.empleado.rut} - {self.capacitacion.id} - ${self.monto}"
 
 class Vehiculo(models.Model):
     patent = models.CharField(primary_key=True, max_length=10)
@@ -122,24 +123,27 @@ class Implemento(models.Model):
     description = models.TextField()
     worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)
 
-class PagoBien(models.Model):
-    date = models.DateField()
-    total = models.FloatField()
-    description = models.TextField()
+class Pago(models.Model):
+   fecha = models.DateField()
+   monto = models.FloatField(validators=[MinValueValidator(0)])
+   descripcion = models.TextField()
 
-class PagoSueldo(models.Model):
-    date = models.DateField()
-    total = models.FloatField()
-    description = models.TextField()
-    worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+class PagoEmpleado(models.Model):
+    pago = models.OneToOneField(Pago, on_delete=models.CASCADE)
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    afp = models.ForeignKey(AFP, on_delete=models.CASCADE)
+
+class PagoInsumoServicio(models.Model):
+    pago = models.OneToOneField(Pago, on_delete=models.CASCADE)
+    capacitacion = models.ForeignKey(Capacitacion, on_delete=models.CASCADE)
 
 class PagoVehiculo(models.Model):
-    vehicle = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
-    id_pay = models.ForeignKey(PagoBien, on_delete=models.CASCADE)
+    vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
+    pago = models.ForeignKey(Pago, on_delete=models.CASCADE)
 
 class PagoImplemento(models.Model):
-    id_implement = models.ForeignKey(Implemento, on_delete=models.CASCADE)
-    id_pay = models.ForeignKey(PagoBien, on_delete=models.CASCADE)
+    pago = models.ForeignKey(Pago, on_delete=models.CASCADE)
+    implemento = models.ForeignKey(Implemento, on_delete=models.CASCADE)
 
 class Permiso(models.Model):
     worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)

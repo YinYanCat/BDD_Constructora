@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.db.models import Q
+from django.db import transaction
 
 from .forms.PermisoForm import PermisoForm
 from .factories.PermisoFactory import PermisoFactory
@@ -18,12 +20,21 @@ from .forms.ProyectoForm import ProyectoForm
 from .forms.EmpleadoProyectoForm import EmpleadoProyectoForm
 from .factories.EmpleadoProyectoFactory import EmpleadoProyectoFactory
 
+from .forms.CapacitacionForm import CapacitacionForm
+from .forms.FacturaForm import FacturaForm
+from .forms.PagoForm import PagoForm
+from .forms.PagoEmpleadoForm import PagoEmpleadoForm
+from .forms.PagoInsumoServForm import PagoInsumoServForm
+from .forms.PagoVehiculoForm import PagoVehiculoForm
+from .forms.PagoImplementoForm import PagoImplementoForm
+
+from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, AsignacionVehiculo, Capacitacion, Factura, Pago, PagoEmpleado, PagoInsumoServicio, PagoImplemento, PagoVehiculo
+
 from .factories.ProfesionFactory import ProfesionFactory
 from .forms.ProfesionForm import ProfesionForm
 from .factories.AFPFactory import AFPFactory
 from .forms.AFPForm import AFPForm
 
-from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, AsignacionVehiculo
 
 
 @login_required
@@ -293,6 +304,102 @@ def registro_proyecto(request):
         form = ProyectoForm()
     return render(request, 'app/registro_proyecto.html', {'form': form})
 
+def registrar_capacitacion(request):
+    if request.method == 'POST':
+        form = CapacitacionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('registrar_capacitacion')  # redirige a sí misma para que se actualice
+    else:
+        form = CapacitacionForm()
+
+    # Obtener todas las capacitaciones para mostrarlas
+    capacitaciones = Capacitacion.objects.all().order_by('-end_date')
+
+    return render(request, 'app/registrar_capacitacion.html', {
+        'form': form,
+        'capacitaciones': capacitaciones
+    })
+
+def registrar_factura(request):
+    if request.method == 'POST':
+        form = FacturaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('registrar_factura')  # redirige a sí misma
+    else:
+        form = FacturaForm()
+
+    facturas = Factura.objects.select_related('empleado', 'capacitacion').all().order_by('-id')
+
+    return render(request, 'app/registrar_factura.html', {
+        'form': form,
+        'facturas': facturas
+    })
+
+def pagos_view(request):
+    query = request.GET.get('q', '')
+    tipo = request.GET.get('tipo', '')
+
+    pagos_base = Pago.objects.filter(
+        Q(descripcion__icontains=query) |
+        Q(monto__icontains=query) |
+        Q(fecha__icontains=query)
+    ).order_by('-fecha')
+
+    pagos_empleado = PagoEmpleado.objects.select_related('pago', 'empleado', 'afp').all() if tipo in ['', 'empleado'] else []
+    pagos_insumo = PagoInsumoServicio.objects.select_related('pago', 'capacitacion').all() if tipo in ['', 'insumo'] else []
+    pagos_vehiculo = PagoVehiculo.objects.select_related('pago', 'vehiculo').all() if tipo in ['', 'vehiculo'] else []
+    pagos_implemento = PagoImplemento.objects.select_related('pago', 'implemento').all() if tipo in ['', 'implemento'] else []
+
+    mensaje = ''
+    pago_form = PagoForm()
+    tipo_pago_form = None
+    tipo_form_activo = ''  # Guarda el tipo de formulario activo
+
+    if request.method == 'POST':
+        if 'crear_pago' in request.POST:
+            pago_form = PagoForm(request.POST)
+            if pago_form.is_valid():
+                nuevo_pago = pago_form.save()
+                mensaje = f'Pago #{nuevo_pago.id} creado. Ahora asigna su tipo abajo.'
+                pago_form = PagoForm()  # Limpiar form después de guardar
+
+        elif 'tipo_form' in request.POST:
+            tipo_form_activo = request.POST.get('tipo_form', '')
+            if tipo_form_activo == 'empleado':
+                tipo_pago_form = PagoEmpleadoForm(request.POST)
+            elif tipo_form_activo == 'insumo':
+                tipo_pago_form = PagoInsumoServForm(request.POST)
+            elif tipo_form_activo == 'vehiculo':
+                tipo_pago_form = PagoVehiculoForm(request.POST)
+            elif tipo_form_activo == 'implemento':
+                tipo_pago_form = PagoImplementoForm(request.POST)
+            else:
+                tipo_pago_form = None
+
+            if tipo_pago_form and tipo_pago_form.is_valid():
+                tipo_pago_form.save()
+                mensaje = "Tipo de pago asignado correctamente."
+                tipo_pago_form = None
+                tipo_form_activo = ''
+
+    context = {
+        'query': query,
+        'tipo': tipo,
+        'pagos_base': pagos_base,
+        'pagos_empleado': pagos_empleado,
+        'pagos_insumo': pagos_insumo,
+        'pagos_vehiculo': pagos_vehiculo,
+        'pagos_implemento': pagos_implemento,
+        'pago_form': pago_form,
+        'tipo_pago_form': tipo_pago_form,
+        'mensaje': mensaje,
+        'tipo_form_activo': tipo_form_activo,
+    }
+
+    return render(request, 'app/pagos.html', context)
+=======
 def crear_profesion(request):
     if request.method == 'POST':
         form = ProfesionForm(request.POST)

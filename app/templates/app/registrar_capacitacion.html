@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<h2>Registrar Capacitación</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Registrar</button>
+</form>
+
+<hr>
+
+<h3>Capacitaciones Registradas</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Institución</th>
+            <th>Fecha de término</th>
+            <th>Certificado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cap in capacitaciones %}
+        <tr>
+            <td>{{ cap.name }}</td>
+            <td>{{ cap.institution }}</td>
+            <td>{{ cap.end_date }}</td>
+            <td>{{ cap.cert }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No hay capacitaciones registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

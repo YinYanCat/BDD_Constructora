@@ -1,0 +1,42 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<h2>Registrar Factura</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Registrar</button>
+</form>
+
+<hr>
+
+<h3>Facturas Registradas</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Empleado</th>
+            <th>Capacitación</th>
+            <th>Monto</th>
+            <th>Detalle</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for factura in facturas %}
+        <tr>
+            <td>{{ factura.id }}</td>
+            <td>{{ factura.empleado.first_name }} {{ factura.empleado.last_name }}</td>
+            <td>{{ factura.capacitacion.name }}</td>
+            <td>${{ factura.monto }}</td>
+            <td>{{ factura.detalle }}</td>
+            <td>{{ factura.estado }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No hay facturas registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
