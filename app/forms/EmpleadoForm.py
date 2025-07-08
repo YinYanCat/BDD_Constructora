@@ -6,7 +6,7 @@ class EmpleadoForm(forms.ModelForm):
     class Meta:
         model = Empleado
         fields = ['rut', 'first_name', 'last_name', 'salary', 'contract_date', 
-                 'phone', 'email', 'is_active', 'afp']
+                 'phone', 'email', 'is_active', 'afp', 'profesion']
         
         widgets = {
             'rut': forms.TextInput(attrs={
@@ -57,7 +57,8 @@ class EmpleadoForm(forms.ModelForm):
             'phone': 'Teléfono',
             'email': 'Correo Electrónico',
             'is_active': 'Empleado Activo',
-            'afp': 'AFP'
+            'afp': 'AFP',
+            'profesion': 'Profesión'
         }
     
     def clean_rut(self):

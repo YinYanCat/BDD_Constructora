@@ -38,6 +38,7 @@ class Empleado(models.Model):
     email = models.CharField(null=False, unique=True, max_length=200)
     is_active = models.BooleanField(null=False)
     afp = models.ForeignKey(AFP, on_delete=models.PROTECT)
+    profesion = models.ForeignKey('Profesion', on_delete=models.PROTECT)
 
     def __str__(self):
         return f'{self.rut} - {self.first_name} {self.last_name}'
@@ -145,3 +146,9 @@ class Permiso(models.Model):
     start = models.DateField()
     end = models.DateField()
     ptype = models.CharField(max_length=50)
+
+
+class Profesion(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    def __str__(self):
+        return self.name

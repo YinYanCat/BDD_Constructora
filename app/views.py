@@ -17,6 +17,10 @@ from .forms.VehiculoForm import VehiculoForm
 from .forms.ProyectoForm import ProyectoForm
 from .forms.EmpleadoProyectoForm import EmpleadoProyectoForm
 from .factories.EmpleadoProyectoFactory import EmpleadoProyectoFactory
+
+from .factories.ProfesionFactory import ProfesionFactory
+from .forms.ProfesionForm import ProfesionForm
+
 from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, AsignacionVehiculo
 
 
@@ -49,9 +53,8 @@ def registro_permiso(request):
     return render(request, 'app/registro_permiso.html', {'form': form}) 
 
 def lista_permisos(request):
-    return render(request, 'app/lista_permisos.html', {
-        'permisos': PermisoFactory.listar_permisos()
-    })
+    return render(request, 'app/lista_permisos.html')
+
 
 def lista_proyecto(request, activos = 'true'):
     if activos == 'true':
@@ -287,3 +290,19 @@ def registro_proyecto(request):
     else:
         form = ProyectoForm()
     return render(request, 'app/registro_proyecto.html', {'form': form})
+
+def crear_profesion(request):
+    if request.method == 'POST':
+        form = ProfesionForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            factory = ProfesionFactory()
+            try: 
+                factory.crear_profesion(data['name'])
+                messages.success(request, 'Profesión creada con éxito.')
+                return redirect('crear_profesion')
+            except Exception as e:
+                form.add_error(None, str(e))
+    else:
+        form = ProfesionForm()
+    return render(request, 'app/crear_profesion.html', {'form': form})
