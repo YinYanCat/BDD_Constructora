@@ -34,7 +34,12 @@ urlpatterns = [
     path('registrar_capacitacion/', registrar_capacitacion, name='registrar_capacitacion'),
     path('registrar_factura/', registrar_factura, name='registrar_factura'),
     path('pagos/', pagos_view, name='vista_pagos'),
+  
+    path('registro_permisos/', registro_permiso, name='registro_permisos'),
+    path('lista_permisos/', lista_permisos, name='lista_permisos'),
 
+
+    path('crear_profesion/', crear_profesion, name='crear_profesion'),
     
-
+    path('crear_afp/', crear_afp, name='crear_afp'),
 ]

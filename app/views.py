@@ -19,6 +19,7 @@ from .forms.VehiculoForm import VehiculoForm
 from .forms.ProyectoForm import ProyectoForm
 from .forms.EmpleadoProyectoForm import EmpleadoProyectoForm
 from .factories.EmpleadoProyectoFactory import EmpleadoProyectoFactory
+
 from .forms.CapacitacionForm import CapacitacionForm
 from .forms.FacturaForm import FacturaForm
 from .forms.PagoForm import PagoForm
@@ -28,6 +29,12 @@ from .forms.PagoVehiculoForm import PagoVehiculoForm
 from .forms.PagoImplementoForm import PagoImplementoForm
 
 from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, AsignacionVehiculo, Capacitacion, Factura, Pago, PagoEmpleado, PagoInsumoServicio, PagoImplemento, PagoVehiculo
+
+from .factories.ProfesionFactory import ProfesionFactory
+from .forms.ProfesionForm import ProfesionForm
+from .factories.AFPFactory import AFPFactory
+from .forms.AFPForm import AFPForm
+
 
 
 @login_required
@@ -56,7 +63,11 @@ def registro_permiso(request):
                 form.add_error(None, str(e))
     else:
         form = PermisoForm()
-    return render(request, 'PAGINA REGISTRO PERMISO', {'form': form}) #LLAMAR AL HTML CORRESPONDIENTE
+    return render(request, 'app/registro_permiso.html', {'form': form}) 
+
+def lista_permisos(request):
+    return render(request, 'app/lista_permisos.html')
+
 
 def lista_proyecto(request, activos = 'true'):
     if activos == 'true':
@@ -388,3 +399,35 @@ def pagos_view(request):
     }
 
     return render(request, 'app/pagos.html', context)
+=======
+def crear_profesion(request):
+    if request.method == 'POST':
+        form = ProfesionForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            factory = ProfesionFactory()
+            try: 
+                factory.crear_profesion(data['name'])
+                messages.success(request, 'Profesión creada con éxito.')
+                return redirect('crear_profesion')
+            except Exception as e:
+                form.add_error(None, str(e))
+    else:
+        form = ProfesionForm()
+    return render(request, 'app/crear_profesion.html', {'form': form})
+
+def crear_afp(request):
+    if request.method == 'POST':
+        form = AFPForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            factory = AFPFactory()
+            try: 
+                factory.crear_afp(data['name'])
+                messages.success(request, 'AFP creada con éxito.')
+                return redirect('crear_afp')
+            except Exception as e:
+                form.add_error(None, str(e))
+    else:
+        form = AFPForm()
+    return render(request, 'app/crear_afp.html', {'form': form})

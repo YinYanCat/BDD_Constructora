@@ -76,6 +76,12 @@
             {{ form.afp }}
             {% if form.afp.errors %}<br><span style="color: red;">{{ form.afp.errors }}</span>{% endif %}
         </p>
+
+        <p>
+            <label>{{ form.profesion.label }}:</label><br>
+            {{ form.profesion }}
+            {% if form.profesion.errors %}<br><span style="color: red;">{{ form.profesion.errors }}</span>{% endif %}
+        </p>
         
         <p>
             {{ form.is_active }} {{ form.is_active.label }}
@@ -88,6 +94,7 @@
             </button>
             <a href="{% url 'home' %}" style="margin-left: 10px;">Volver</a>
         </p>
+
     </form>
 </div>
 {% endblock %}
