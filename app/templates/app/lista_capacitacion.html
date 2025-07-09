@@ -1,16 +1,11 @@
 {% extends 'app/base.html' %}
-
 {% block content %}
-<h2>Registrar Capacitación</h2>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Registrar</button>
-</form>
+<p style="margin-top: 20px;">
+    <a href="{% url 'registro_capacitacion' %}" id="btn_reg"> Registrar Nueva Capacitación </a>
+</p>
 
-<hr>
-
-<h3>Capacitaciones Registradas</h3>
+<div style="max-width: 600px; margin: 50px auto;">
+<h1>Lista de Capacitaciones</h1>
 <table border="1">
     <thead>
         <tr>
@@ -35,4 +30,5 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
 {% endblock %}

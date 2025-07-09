@@ -31,15 +31,16 @@ urlpatterns = [
     path('vehiculos/<str:vehiculo_id>/asignar/', asignar_empleado, name='asignar_empleado'),
     path('vehiculos/<str:vehiculo_id>/quitar/<str:empleado_id>/', quitar_empleado, name='quitar_empleado'),
 
-    path('registrar_capacitacion/', registrar_capacitacion, name='registrar_capacitacion'),
-    path('registrar_factura/', registrar_factura, name='registrar_factura'),
-    path('pagos/', pagos_view, name='vista_pagos'),
-  
+    path('lista_capacitacion/', lista_capacitacion, name='lista_capacitacion'),
+    path('registro_capacitacion/', registro_capacitacion, name='registro_capacitacion'),
+
+    path('lista_factura/', lista_factura, name='lista_factura'),
+    path('registro_factura/', registro_factura, name='registro_factura'),
+
     path('registro_permisos/', registro_permiso, name='registro_permisos'),
     path('lista_permisos/', lista_permisos, name='lista_permisos'),
 
-
+    path('pagos/', pagos_view, name='vista_pagos'),
     path('crear_profesion/', crear_profesion, name='crear_profesion'),
-    
     path('crear_afp/', crear_afp, name='crear_afp'),
 ]

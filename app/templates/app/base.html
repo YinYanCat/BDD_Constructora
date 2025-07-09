@@ -5,29 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Constructora BD</title>
     {% load static %}
-
-    
-    <link rel="stylesheet" href="{% static 'app/css/estilos.css' %}">
+    <link rel="stylesheet" href="{% static 'app/css/estilos2.css' %}">
     {% block css %}
     {% endblock %}
 </head>
-<body>
 
+<body style="background-color:#ffdede;">
     <header id="banner">
-        <h1>Constructora BD</h1>
+        <h1>Constructora T&O</h1>
         <nav id="navbar">
             <ul>
                 <li><a href="{% url 'home' %}">Inicio</a></li>
-                <li><a href="{% url 'registro_empleado' %}">Registrar Empleado</a></li>
-                <li><a href="{% url 'lista_empleados' %}">Lista Empleados</a></li>
-                <li><a href="{% url 'asignar_empleado_proyecto' %}">Asignar Empleado a Proyecto</a></li>
-                <li><a href="{% url 'lista_asignaciones' %}">Ver Asignaciones</a></li>
-                <li><a href="{% url 'lista_proyecto' %}">Lista de Proyectos</a></li>
-                <li><a href="{% url 'registrar_capacitacion' %}">Capacitaciones</a></li>
-                <li><a href="{% url 'registrar_factura' %}">Facturas</a></li>
-                <li><a href="{% url 'vista_pagos' %}">Pagos</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'crear_afp' %}">AFP</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'crear_profesion' %}">Profesión</a></li>
+                <li><a href="{% url 'lista_empleados' %}">Empleados</a></li>
+                <li><a href="{% url 'lista_asignaciones' %}">Asignaciones</a></li>
+                <li><a href="{% url 'lista_proyecto' %}">Proyectos</a></li>
+                <li><a href="{% url 'lista_capacitacion' %}">Capacitaciones</a></li>
+                <li><a href="{% url 'lista_factura' %}">Facturas</a></li>
+                <li><a href="{% url 'lista_implementos' %}">Implementos</a></li>
+                <li><a href=#>Vehículos</a></li>
             </ul>
         </nav>
     </header>
@@ -46,7 +41,7 @@
         <p>2025 Bases de datos</p>
        <nav id="navbar">
     <ul>
-        <li><a href="{% url 'home' %}">Inicio</a></li>
+        <li><a href="{% url 'home' %}" style="background:none;border:none;color:blue;cursor:pointer;">Inicio</a></li>
         {% if user.is_authenticated %}
             <li>
                 <form action="{% url 'salir' %}" method="post" style="display:inline;">
@@ -55,11 +50,11 @@
                 </form>
             </li>
         {% else %}
-            <li><a href="{% url 'login' %}">Ingresar</a></li>
+            <li><a href="{% url 'login' %}" style="background:none;border:none;color:blue;cursor:pointer;">Ingresar</a></li>
         {% endif %}
     </ul>
 </nav>
     </footer>
-    
+
 </body>
 </html>

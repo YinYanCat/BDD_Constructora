@@ -1,15 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Iniciar Sesion</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructora BD</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'app/css/estilos2.css' %}">
+    {% block css %}
+    {% endblock %}
 </head>
-<body>
-    <p>Iniciar Sesion</p>
-    <form method="post" action="">
-        {% csrf_token %}        
-        <input type="text" name="username" placeholder="Usuario" required />
-        <input type="password" name="password" placeholder="Contraseña" required />
-        <button type="submit">Iniciar Sesion</button>
+
+<body style="background-color:#ffdede;">
+    <header id="banner">
+        <h1>Constructora T&O</h1>
+        <nav id="navbar">
+            <ul>
+                <li><a href=#> Registrarse </a></li>
+                <li><a href=#> Iniciar Sesión </a></li>
+            </ul>
+        </nav>
+    </header>
+    <div style="max-width: 200px; margin: 50px auto; padding: 10px;">
+        <h1>Iniciar Sesión</h1>
+        <form method="post" action="">
+            {% csrf_token %}
+            <input class="gfg-box" type="text" name="username" placeholder="Usuario" required />
+            </n>
+            <input class="gfg-box" type="password" name="password" placeholder="Contraseña" required />
+            <button type="submit">Iniciar Sesion</button>
+        </form>
+    </div>
 </body>
 </html>
+
+    <style>
+
+        .gfg-box {
+            background-color: #FFFFFF;
+            color: black;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: left;
+            border-radius: 10px;
+        }
+    </style>

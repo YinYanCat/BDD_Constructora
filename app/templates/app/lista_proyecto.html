@@ -1,23 +1,27 @@
 {% extends 'app/base.html' %}
 {% block content %}
-    <div>
-        <section>
-            <h1>Proyectos: {{ filter }}</h1>
-                  <form method="get" action="{% url 'lista_proyecto' 'true'%}">
-                    <button type="submit">Ver solo activos</button>
-                  </form>
-                  <form method="get" action="{% url 'lista_proyecto' 'false'%}">
-                    <button type="submit">Ver todos</button>
-                  </form>
-                {% for proyecto in proyectos %}
-                  <h2>{{ proyecto.name }} ID: {{ proyecto.id }}</h2>
-                  <form method="get" action="{% url 'toggle_proyecto' proyecto.id%}">
-                    Estado: <button type="submit">{{ proyecto.is_active }}</button>
-                  </form>
-                  <form method="get" action="{% url 'proyecto_empleados' proyecto.id%}">
-                    <button type="submit">Ver Empleados</button>
-                  </form>
-                {% endfor %}
-        </section>
-    </div>
+<p style="margin-top: 20px;">
+    <a href="{% url 'registro_proyecto' %}" id="btn_reg"> Registrar Nuevo Proyecto </a>
+</p>
+<div style="max-width: 600px; margin: 50px auto;">
+    <h1>Lista de Proyectos</h1>
+
+    <form method="get" action="{% url 'lista_proyecto' 'true'%}">
+        <button type="submit">Ver solo activos</button>
+    </form>
+    <form method="get" action="{% url 'lista_proyecto' 'false'%}">
+        <button type="submit">Ver todos</button>
+    </form>
+
+    <h2>{{ filter }}:</h2>
+    {% for proyecto in proyectos %}
+    <h2>{{ proyecto.name }} ID: {{ proyecto.id }}</h2>
+    <form method="get" action="{% url 'toggle_proyecto' proyecto.id%}">
+        Estado: <button type="submit">{{ proyecto.is_active }}</button>
+    </form>
+    <form method="get" action="{% url 'proyecto_empleados' proyecto.id%}">
+        <button type="submit">Ver Empleados</button>
+    </form>
+    {% endfor %}
+</div>
 {% endblock %}

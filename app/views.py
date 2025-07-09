@@ -304,38 +304,34 @@ def registro_proyecto(request):
         form = ProyectoForm()
     return render(request, 'app/registro_proyecto.html', {'form': form})
 
-def registrar_capacitacion(request):
+def registro_capacitacion(request):
     if request.method == 'POST':
         form = CapacitacionForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('registrar_capacitacion')  # redirige a sí misma para que se actualice
+            return redirect('registro_capacitacion')  # redirige a sí misma para que se actualice
     else:
         form = CapacitacionForm()
 
-    # Obtener todas las capacitaciones para mostrarlas
+    return render(request, 'app/registro_capacitacion.html', {'form': form,})
+
+def lista_capacitacion(request):
     capacitaciones = Capacitacion.objects.all().order_by('-end_date')
+    return render(request, 'app/lista_capacitacion.html', { 'capacitaciones': capacitaciones })
 
-    return render(request, 'app/registrar_capacitacion.html', {
-        'form': form,
-        'capacitaciones': capacitaciones
-    })
-
-def registrar_factura(request):
+def registro_factura(request):
     if request.method == 'POST':
         form = FacturaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('registrar_factura')  # redirige a sí misma
+            return redirect('registro_factura')  # redirige a sí misma
     else:
         form = FacturaForm()
+    return render(request, 'app/registro_factura.html', {'form': form,})
 
+def lista_factura(request):
     facturas = Factura.objects.select_related('empleado', 'capacitacion').all().order_by('-id')
-
-    return render(request, 'app/registrar_factura.html', {
-        'form': form,
-        'facturas': facturas
-    })
+    return render(request, 'app/lista_factura.html', {'facturas': facturas})
 
 def pagos_view(request):
     query = request.GET.get('q', '')

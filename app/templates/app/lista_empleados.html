@@ -1,8 +1,11 @@
 {% extends 'app/base.html' %}
 
 {% block content %}
-<div style="max-width: 800px; margin: 50px auto; padding: 20px;">
-    <h1>Lista de Empleados Registrados</h1>
+<p style="margin-top: 20px;">
+    <a href="{% url 'registro_empleado' %}" id="btn_reg"> Registrar Nuevo Empleado </a>
+</p>
+<div style="max-width: 600px; margin: 50px auto;">
+    <h1>Lista de Empleados</h1>
     
     {% if empleados %}
         <p>Total de empleados: <strong>{{ empleados.count }}</strong></p>
@@ -54,12 +57,5 @@
     {% else %}
         <p>No hay empleados registrados aún.</p>
     {% endif %}
-    
-    <p style="margin-top: 20px;">
-        <a href="{% url 'registro_empleado' %}" style="background: rgb(228, 228, 228); color: rgb(0, 0, 0); padding: 10px 20px; text-decoration: none;">
-             Registrar Nuevo Empleado
-        </a>
-        <a href="{% url 'home' %}" style="margin-left: 10px;"> Volver al Inicio</a>
-    </p>
 </div>
 {% endblock %}

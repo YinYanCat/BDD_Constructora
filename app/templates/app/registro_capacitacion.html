@@ -1,0 +1,12 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 50px auto; padding: 20px;">
+<h1>Registrar Capacitación</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Registrar</button>
+</form>
+</div>
+{% endblock %}

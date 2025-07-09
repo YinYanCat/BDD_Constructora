@@ -1,9 +1,13 @@
 {% extends 'app/base.html' %}
 {% load static %}
-
 {% block content %}
-<div class="container">
-    <h2>Lista de Asignaciones de Empleados a Proyectos</h2>
+
+<p style="margin-top: 20px;">
+    <a href="{% url 'asignar_empleado_proyecto' %}" id="btn_reg"> Asignar Empleado a Proyecto </a>
+</p>
+<div style="max-width: 600px; margin: 50px auto;">
+    <h1>Lista de Asignaciones</h1>
+    <h2>Empleados asignados a Proyectos</h2>
     
     {% if asignaciones %}
         <table class="table">
@@ -35,8 +39,8 @@
     {% endif %}
     
     <div class="actions">
-        <a href="{% url 'asignar_empleado_proyecto' %}" class="btn btn-primary">Asignar Empleado a Proyecto</a>
         <a href="{% url 'registro_empleado' %}" class="btn btn-secondary">Registrar Nuevo Empleado</a>
+        <a href="{% url 'registro_proyecto' %}" class="btn btn-secondary">Registrar Nuevo Proyecto</a>
     </div>
 </div>
 
@@ -63,11 +67,11 @@
         background-color: #f2f2f2;
         font-weight: bold;
     }
-    
+
     .actions {
         margin-top: 20px;
     }
-    
+
     .btn {
         display: inline-block;
         padding: 10px 20px;
@@ -75,12 +79,12 @@
         border-radius: 4px;
         margin-right: 10px;
     }
-    
+
     .btn-primary {
-        background-color: #007bff;
+        background-color: #d63838;
         color: white;
     }
-    
+
     .btn-secondary {
         background-color: #6c757d;
         color: white;

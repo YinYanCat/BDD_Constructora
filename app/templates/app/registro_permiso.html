@@ -1,8 +1,9 @@
 {% extends "app/base.html" %}
 {% load static %}
 {% block content %}
+
 <div class="container mt-4">
-    <h2>Registrar Permiso</h2>
+    <h1>Registrar Permiso</h1>
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-{{ message.tags }} mt-2">{{ message }}</div>

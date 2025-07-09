@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Vehiculo</title>
-</head>
-<body>
+{% extends 'app/base.html' %}
+{% block content %}
+
+<div style="max-width: 600px; margin: 50px auto; padding: 20px;">
+    <h1>Registrar Proyecto</h1>
     <!-- Mensajes -->
     {% if messages %}
         {% for message in messages %}
@@ -72,5 +69,5 @@
             <a href="{% url 'home' %}" style="margin-left: 10px;">Volver</a>
         </p>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}
