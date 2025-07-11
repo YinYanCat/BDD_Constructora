@@ -3,11 +3,6 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Crear Profesión</h2>
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} mt-2">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
     <form method="post" class="mt-3">
         {% csrf_token %}
         <div class="mb-3">

@@ -1,0 +1,40 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 50px auto; padding: 20px;">
+<h1>Registrar Implemento</h1>
+<form method="post">
+        {% csrf_token %}
+
+        <p>
+            <label>{{ form.itype.label }}:</label><br>
+            {{ form.itype }}
+            {% if form.itype.errors %}
+                <br><span style="color: red;">{{ form.itype.errors }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <label>{{ form.worker.label }}:</label><br>
+            {{ form.worker }}
+            {% if form.worker.errors %}
+                <br><span style="color: red;">{{ form.worker.errors }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <label>{{ form.description.label }}:</label><br>
+            {{ form.description }}
+            {% if form.description.errors %}
+                <br><span style="color: red;">{{ form.description.errors }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <button type="submit" style="background: rgb(5, 146, 0); color: white; padding: 10px 20px; border: none;">
+                    Registrar Implemento
+            </button>
+        </p>
+    </form>
+</div>
+{% endblock %}

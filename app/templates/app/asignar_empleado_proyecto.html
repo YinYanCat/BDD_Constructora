@@ -3,23 +3,6 @@
 {% block content %}
 <div style="max-width: 600px; margin: 50px auto; padding: 10px;">
     <h1>Asignar Empleado a Proyecto</h1>
-    
-    <!-- Mensajes -->
-    {% if messages %}
-        {% for message in messages %}
-            <div style="background: green; color: white; padding: 10px; margin: 10px 0;">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-    
-    <!-- Errores -->
-    {% if form.non_field_errors %}
-        <div style="background: red; color: white; padding: 10px; margin: 10px 0;">
-            {{ form.non_field_errors }}
-        </div>
-    {% endif %}
-    
     <form method="post">
         {% csrf_token %}
         
@@ -51,8 +34,6 @@
             <button type="submit" style="background: rgb(5, 146, 0); color: white; padding: 10px 20px; border: none;">
                 Asignar Empleado
             </button>
-            <a href="{% url 'lista_empleados' %}" style="margin-left: 10px;">Ver Empleados</a>
-            <a href="{% url 'home' %}" style="margin-left: 10px;">Volver</a>
         </p>
     </form>
 </div>

@@ -30,6 +30,11 @@ class AFP(models.Model):
     def __str__(self):
         return self.name
 
+class Profesion(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    def __str__(self):
+        return self.name
+
 class Empleado(models.Model):
     rut = models.CharField(primary_key=True, max_length=16)
     first_name = models.CharField(null=False, max_length=200)
@@ -40,7 +45,7 @@ class Empleado(models.Model):
     email = models.CharField(null=False, unique=True, max_length=200)
     is_active = models.BooleanField(null=False)
     afp = models.ForeignKey(AFP, on_delete=models.PROTECT)
-    profesion = models.ForeignKey('Profesion', on_delete=models.PROTECT)
+    profesion = models.ForeignKey(Profesion, on_delete=models.PROTECT)
 
     def __str__(self):
         return f'{self.rut} - {self.first_name} {self.last_name}'
@@ -123,7 +128,7 @@ class Implemento(models.Model):
     id = models.AutoField(primary_key=True)
     itype = models.CharField(max_length=100)
     description = models.TextField()
-    worker = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    worker = models.ForeignKey(Empleado, on_delete=models.CASCADE, null=True)
 
 class Pago(models.Model):
    fecha = models.DateField()
@@ -152,9 +157,3 @@ class Permiso(models.Model):
     start = models.DateField()
     end = models.DateField()
     ptype = models.CharField(max_length=50)
-
-
-class Profesion(models.Model):
-    name = models.CharField(max_length=200, unique=True)
-    def __str__(self):
-        return self.name

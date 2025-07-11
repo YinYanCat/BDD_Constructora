@@ -3,16 +3,20 @@
 {% block content %}
 <p style="margin-top: 20px;">
     <a href="{% url 'registro_empleado' %}" id="btn_reg"> Registrar Nuevo Empleado </a>
+    {% if filter == 'Todos' %}
+    <a href="{% url 'lista_empleados' 'true'%}" id="btn_sec"> Ver Solo Activos</a>
+    {% else %}
+    <a href="{% url 'lista_empleados' 'false'%}" id="btn_sec"> Ver Todos</a>
+    {% endif %}
 </p>
 <div style="max-width: 600px; margin: 50px auto;">
     <h1>Lista de Empleados</h1>
-    
+    <h2>{{ filter }} ({{ empleados.count }})</h2>
+
     {% if empleados %}
-        <p>Total de empleados: <strong>{{ empleados.count }}</strong></p>
-        
-        <table border="1" style="width: 100%; border-collapse: collapse;">
+        <table border="1" style="width: 110%; border-collapse: collapse;">
             <thead>
-                <tr style="background-color: #f0f0f0;">
+                <tr style="background-color: #f46464; color: #ffffff">
                     <th style="padding: 10px;">RUT</th>
                     <th style="padding: 10px;">Nombre</th>
                     <th style="padding: 10px;">Cargo</th>
@@ -24,10 +28,10 @@
             </thead>
             <tbody>
                 {% for empleado in empleados %}
-                <tr {% if not empleado.is_active %}style="background-color: #d9d9d9; color: #666;"{% endif %}>
+                <tr style="background-color: #ffffff;">
                     <td style="padding: 10px;">{{ empleado.rut }}</td>
                     <td style="padding: 10px;">{{ empleado.first_name }} {{ empleado.last_name }}</td>
-                    <td style="padding: 10px;">{{ empleado.title }}</td>
+                    <td style="padding: 10px;">{{ empleado.profesion }}</td>
                     <td style="padding: 10px;">${{ empleado.salary }}</td>
                     <td style="padding: 10px;">{{ empleado.afp.name }}</td>
                     <td style="padding: 10px;">
@@ -55,7 +59,7 @@
             </tbody>
         </table>
     {% else %}
-        <p>No hay empleados registrados aún.</p>
+        <p>No hay empleados registrados.</p>
     {% endif %}
 </div>
 {% endblock %}

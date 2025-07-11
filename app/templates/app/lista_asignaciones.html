@@ -8,86 +8,34 @@
 <div style="max-width: 600px; margin: 50px auto;">
     <h1>Lista de Asignaciones</h1>
     <h2>Empleados asignados a Proyectos</h2>
-    
-    {% if asignaciones %}
-        <table class="table">
+
+        {% if asignaciones %}
+        <table border="1" style="width: 110%; border-collapse: collapse;">
             <thead>
-                <tr>
-                    <th>Empleado</th>
-                    <th>Proyecto</th>
-                    <th>Cargo</th>
-                    <th>Sueldo Base</th>
-                    <th>Bono</th>
-                    <th>Fecha de Asignación</th>
+                <tr style="background-color: #f46464; color: #ffffff">
+                    <th style="padding: 10px;">Empleado</th>
+                    <th style="padding: 10px;">Proyecto</th>
+                    <th style="padding: 10px;">Cargo</th>
+                    <th style="padding: 10px;">Sueldo Base</th>
+                    <th style="padding: 10px;">Bono</th>
+                    <th style="padding: 10px;">Fecha de Asignación</th>
                 </tr>
             </thead>
             <tbody>
                 {% for asignacion in asignaciones %}
-                <tr>
-                    <td>{{ asignacion.worker.first_name }} {{ asignacion.worker.last_name }}</td>
-                    <td>{{ asignacion.proyect.name }}</td>
-                    <td>{{ asignacion.position }}</td>
-                    <td>${{ asignacion.worker.base_pay|floatformat:0 }}</td>
-                    <td>${{ asignacion.bonus_pay|floatformat:0 }}</td>
-                    <td>{{ asignacion.proyect.start_date|date:"d/m/Y" }}</td>
+                <tr style="background-color: #ffffff;">
+                    <td style="padding: 10px;">{{ asignacion.worker.first_name }} {{ asignacion.worker.last_name }}</td>
+                    <td style="padding: 10px;">{{ asignacion.proyect.name }}</td>
+                    <td style="padding: 10px;">{{ asignacion.position }}</td>
+                    <td style="padding: 10px;">${{ asignacion.worker.base_pay|floatformat:0 }}</td>
+                    <td style="padding: 10px;">${{ asignacion.bonus_pay|floatformat:0 }}</td>
+                    <td style="padding: 10px;">{{ asignacion.proyect.start_date|date:"d/m/Y" }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <p>No hay asignaciones de empleados a proyectos registradas.</p>
+        <p>No hay empleados asignados a proyectos.</p>
     {% endif %}
-    
-    <div class="actions">
-        <a href="{% url 'registro_empleado' %}" class="btn btn-secondary">Registrar Nuevo Empleado</a>
-        <a href="{% url 'registro_proyecto' %}" class="btn btn-secondary">Registrar Nuevo Proyecto</a>
-    </div>
 </div>
-
-<style>
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-    
-    .table th, .table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    
-    .table th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-    }
-
-    .actions {
-        margin-top: 20px;
-    }
-
-    .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 4px;
-        margin-right: 10px;
-    }
-
-    .btn-primary {
-        background-color: #d63838;
-        color: white;
-    }
-
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
-    }
-</style>
 {% endblock %}

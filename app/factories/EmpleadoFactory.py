@@ -17,6 +17,11 @@ class EmpleadoFactory:
             afp = form_data['afp']
             if not isinstance(afp, AFP):
                 raise ValidationError("AFP inválida")
+
+            # Validar que la Profesion exista
+            profesion = form_data['profesion']
+            if not isinstance(afp, AFP):
+                raise ValidationError("Profesion inválida")
             
             # Crear el empleado
             empleado = Empleado.objects.create(
@@ -28,7 +33,8 @@ class EmpleadoFactory:
                 phone=form_data['phone'],
                 email=form_data['email'],
                 is_active=form_data['is_active'],
-                afp=afp
+                afp=afp,
+                profesion=profesion
             )
             
             return empleado

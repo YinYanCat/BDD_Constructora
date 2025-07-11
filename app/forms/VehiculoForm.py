@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 class VehiculoForm(forms.Form):
     patent = forms.CharField(required=True, label='Patente', max_length=10)
-    model = forms.CharField(required=True, label='Año del Vehiculo', max_length=100)
+    model = forms.CharField(required=True, label='Modelo del Vehiculo', max_length=100)
     year = forms.IntegerField(required=True, label='Año del Vehiculo')
     vtype = forms.CharField(required=True, label='Tipo de Vehiculo', max_length=50)
     status = forms.CharField(required=True, label='Estado del Vehiculo', max_length=50)

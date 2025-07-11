@@ -6,29 +6,30 @@
 
 <div style="max-width: 600px; margin: 50px auto;">
 <h1>Lista de Capacitaciones</h1>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Institución</th>
-            <th>Fecha de término</th>
-            <th>Certificado</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for cap in capacitaciones %}
-        <tr>
-            <td>{{ cap.name }}</td>
-            <td>{{ cap.institution }}</td>
-            <td>{{ cap.end_date }}</td>
-            <td>{{ cap.cert }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">No hay capacitaciones registradas.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+     {% if capacitaciones %}
+        <table border="1" style="width: 110%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f46464; color: #ffffff">
+                    <th style="padding: 10px;">Nombre</th>
+                    <th style="padding: 10px;">Institución</th>
+                    <th style="padding: 10px;">Fecha de término</th>
+                    <th style="padding: 10px;">Certificado Fin</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cap in capacitaciones %}
+                <tr style="background-color: #ffffff;">
+                    <td style="padding: 10px;">{{ cap.name }}</td>
+                    <td style="padding: 10px;">{{ cap.institution }}</td>
+                    <td style="padding: 10px;">{{ cap.end_date }}</td>
+                    <td style="padding: 10px;">{{ cap.cert }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay capacitaciones registrados.</p>
+    {% endif %}
 </div>
 {% endblock %}

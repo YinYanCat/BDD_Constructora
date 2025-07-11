@@ -1,43 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'app/base.html' %}
+
+{% block content %}
+<p style="margin-top: 20px;">
+    <a href="{% url 'registrar_vehiculo' %}" id="btn_reg"> Registrar Nuevo Vehículo </a>
+</p>
+
+<div style="max-width: 600px; margin: 50px auto;">
     <h1>Lista de Vehículos</h1>
-    {% for item in asignaciones %}
-        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
-            <h2>{{ item.vehiculo.patent }}</h2>
-
-            <h3>Empleados Asignados:</h3>
-            <ul>
-                {% for empleado in item.asignados %}
-                    <li>
-                        {{ empleado.first_name }} {{ empleado.last_name }}
-                        <form method="POST" action="{% url 'quitar_empleado' item.vehiculo.patent empleado.rut %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit">Quitar</button>
-                        </form>
-                    </li>
-                {% empty %}
-                    <li>No hay empleados asignados</li>
+    {% if vehiculos %}
+        <table border="1" style="width: 110%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f46464; color: #ffffff">
+                    <th style="padding: 10px;">Patente</th>
+                    <th style="padding: 10px;">Tipo</th>
+                    <th style="padding: 10px;">Modelo</th>
+                    <th style="padding: 10px;">Año</th>
+                    <th style="padding: 10px;">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vehiculo in vehiculos %}
+                <tr style="background-color: #ffffff;">
+                    <td style="padding: 10px;">{{ vehiculo.patent }}</td>
+                    <td style="padding: 10px;">{{ vehiculo.vtype }}</td>
+                    <td style="padding: 10px;">{{ vehiculo.model }}</td>
+                    <td style="padding: 10px;">{{ vehiculo.year }}</td>
+                    <td style="padding: 10px;">{{ vehiculo.status }}</td>
+                </tr>
                 {% endfor %}
-            </ul>
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay vehículos registrados.</p>
+    {% endif %}
 
-            <h3>Asignar nuevo empleado:</h3>
-            <form method="POST" action="{% url 'asignar_empleado' item.vehiculo.patent %}">
-                {% csrf_token %}
-                <select name="empleado_id" required>
-                    <option value="">-- Selecciona un empleado --</option>
-                    {% for empleado in item.no_asignados %}
-                        <option value="{{ empleado.rut }}">{{ empleado.first_name }} {{ empleado.last_name }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit">Asignar</button>
-            </form>
-        </div>
-    {% endfor %}
-</body>
-</html>
+</div>
+{% endblock %}

@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.db.models import Q
 from django.db import transaction
 
+from .factories.ImplementoFactory import ImplementoFactory
+from .forms.ImplementoForm import ImplementoForm
 from .forms.PermisoForm import PermisoForm
 from .factories.PermisoFactory import PermisoFactory
 from .forms.HorarioForm import HorarioForm
@@ -35,12 +37,11 @@ from .forms.ProfesionForm import ProfesionForm
 from .factories.AFPFactory import AFPFactory
 from .forms.AFPForm import AFPForm
 
-
-
 @login_required
 def home(request):
     return render(request, "app/home.html")
 
+@login_required
 def salir(request):
     logout(request)
     return redirect('/')
@@ -65,10 +66,11 @@ def registro_permiso(request):
         form = PermisoForm()
     return render(request, 'app/registro_permiso.html', {'form': form}) 
 
+@login_required
 def lista_permisos(request):
     return render(request, 'app/lista_permisos.html')
 
-
+@login_required
 def lista_proyecto(request, activos = 'true'):
     if activos == 'true':
         proyectos = Proyecto.objects.filter(is_active = True)
@@ -81,13 +83,14 @@ def lista_proyecto(request, activos = 'true'):
         filter = ''
     return render(request, 'app/lista_proyecto.html', {'proyectos': proyectos,
                                                        'filter' : filter})
-
+@login_required
 def toggle_proyecto(request, proyecto_id):
     proyecto = get_object_or_404(Proyecto, id = proyecto_id)
     proyecto.is_active = not proyecto.is_active
     proyecto.save()
     return redirect('lista_proyecto')
 
+@login_required
 def proyecto_empleados(request, proyecto_id):
     proyecto = get_object_or_404(Proyecto, id=proyecto_id)
     empleados_proyecto = EmpleadoProyecto.objects.filter(proyect=proyecto)
@@ -101,6 +104,26 @@ def lista_implementos(request):
     implementos = Implemento.objects.select_related('worker').all()
     return render(request, 'app/lista_implementos.html', {'implementos': implementos})
 
+@login_required
+def registro_implemento(request):
+    if request.method == 'POST':
+        form = ImplementoForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            factory = ImplementoFactory()
+            try:
+                factory.crear_implemento(
+                    data['itype'], data['worker'], data['description']
+                )
+                messages.success(request, 'Implemento registrado con exito.')
+                return redirect('registro_implemento')
+            except Exception as e:
+                form.add_error(None, str(e))
+    else:
+        form = ImplementoForm()
+    return render(request, 'app/registro_implemento.html', {'form': form,})
+
+@login_required
 def registro_horario(request):
     if request.method == 'POST':
         form = HorarioForm(request.POST)
@@ -119,7 +142,7 @@ def registro_horario(request):
         form = HorarioForm()
     return render(request, 'app/registro_horario.html', {'form': form})
 
-# @login_required  # Comentado para pruebas
+@login_required
 def registro_empleado(request):
     if request.method == 'POST':
         form = EmpleadoForm(request.POST)
@@ -140,10 +163,20 @@ def registro_empleado(request):
     
     return render(request, 'app/registro_empleado.html', {'form': form})
 
-def lista_empleados(request):
-    empleados = Empleado.objects.select_related('afp').all()
-    return render(request, 'app/lista_empleados.html', {'empleados': empleados})
+@login_required
+def lista_empleados(request, activos = 'true'):
+    if activos == 'true':
+        empleados = Empleado.objects.filter(is_active=True)
+        filter = 'Solo activos'
+    elif activos == 'false':
+        empleados = Empleado.objects.all()
+        filter = 'Todos'
+    else:
+        empleados = []
+        filter = ''
+    return render(request, 'app/lista_empleados.html', {'empleados': empleados, 'filter': filter})
 
+@login_required
 def asignar_empleado_proyecto(request):
     if request.method == 'POST':
         form = EmpleadoProyectoForm(request.POST)
@@ -172,10 +205,12 @@ def asignar_empleado_proyecto(request):
     
     return render(request, 'app/asignar_empleado_proyecto.html', {'form': form})
 
+@login_required
 def lista_asignaciones(request):
     asignaciones = EmpleadoProyecto.objects.select_related('worker', 'proyect').all()
     return render(request, 'app/lista_asignaciones.html', {'asignaciones': asignaciones})
-  
+
+@login_required
 def lista_horario(request, rut=None):
     if rut is not None:
         horarios = Horario.objects.filter(worker = rut)
@@ -183,7 +218,8 @@ def lista_horario(request, rut=None):
     else:
         empleados = Empleado.objects.filter(is_active=True)
         return render(request, 'app/lista_horario.html', {'data':empleados})
-    
+
+@login_required
 def lista_empleados_dia(request, day_of_week=None):
     DAYS_OF_WEEK = [
         ('MON', 'Lunes'),
@@ -204,6 +240,7 @@ def lista_empleados_dia(request, day_of_week=None):
         'days': DAYS_OF_WEEK,
     })
 
+@login_required
 def registrar_vehiculo(request):
     if request.method == 'POST':
         form = VehiculoForm(request.POST)
@@ -212,17 +249,17 @@ def registrar_vehiculo(request):
             factory = VehiculoFactory()
             try: 
                 factory.crear_vehiculo(
-                    data['patente'], data['modelo'], data['año'], data['tipo'], data['estado']
+                    data['patent'], data['model'], data['year'], data['vtype'], data['status']
                 )
                 messages.success(request, 'Vehiculo registrado con exito.')
-                return redirect('registro_vehiculo')
+                return redirect('registrar_vehiculo')
             except Exception as e:
                 form.add_error(None, str(e))
     else:
         form = VehiculoForm()
     return render(request, 'app/registro_vehiculo.html', {'form': form})
 
-
+@login_required
 def lista_vehiculo(request):
     vehiculos = Vehiculo.objects.all()
     empleados_activos = Empleado.objects.filter(is_active=True)
@@ -239,14 +276,15 @@ def lista_vehiculo(request):
 
         asignaciones.append({
             'vehiculo': vehiculo,
-            'asignados': asignados,
-            'no_asignados': no_asignados
+            'asdignados': asignados,
+            'no_asignaos': no_asignados
         })
 
     return render(request, 'app/lista_vehiculos.html', {
-        'asignaciones': asignaciones
+        'vehiculos': vehiculos
     })
 
+@login_required
 def asignar_empleado(request, vehiculo_id):
     vehiculo = get_object_or_404(Vehiculo, patent=vehiculo_id)
     empleado_id = request.POST.get('empleado_id')
@@ -257,18 +295,20 @@ def asignar_empleado(request, vehiculo_id):
         messages.success(request, f'{empleado.first_name} asignado a {vehiculo.patent}.')
     return redirect('lista_vehiculo')
 
-@require_POST
+@login_required
 def quitar_empleado(request, vehiculo_id, empleado_id):
-    asignacion = AsignacionVehiculo.objects.filter(vehicle_id=vehiculo_id, worker_id=empleado_id)
-    if asignacion.exists():
-        asignacion.delete()
-        messages.success(request, 'Empleado quitado correctamente.')
-    return redirect('lista_vehiculo')
+    if request.method == 'POST':
+        asignacion = AsignacionVehiculo.objects.filter(vehicle_id=vehiculo_id, worker_id=empleado_id)
+        if asignacion.exists():
+            asignacion.delete()
+            messages.success(request, 'Empleado quitado correctamente.')
+        return redirect('lista_vehiculo')
+    else :
+        return redirect('home')
 
+@login_required
 def toggle_empleado_status(request, empleado_rut):
-    
     empleado = get_object_or_404(Empleado, rut=empleado_rut)
-    
     if request.method == 'POST':
         if empleado.is_active:
             # Desactivar: eliminar asignaciones de vehículos e implementos
@@ -286,6 +326,7 @@ def toggle_empleado_status(request, empleado_rut):
     
     return render(request, 'app/confirmar_toggle_empleado.html', {'empleado': empleado})
 
+@login_required
 def registro_proyecto(request):
     if request.method == 'POST':
         form = ProyectoForm(request.POST)
@@ -304,6 +345,7 @@ def registro_proyecto(request):
         form = ProyectoForm()
     return render(request, 'app/registro_proyecto.html', {'form': form})
 
+@login_required
 def registro_capacitacion(request):
     if request.method == 'POST':
         form = CapacitacionForm(request.POST)
@@ -315,10 +357,12 @@ def registro_capacitacion(request):
 
     return render(request, 'app/registro_capacitacion.html', {'form': form,})
 
+@login_required
 def lista_capacitacion(request):
     capacitaciones = Capacitacion.objects.all().order_by('-end_date')
     return render(request, 'app/lista_capacitacion.html', { 'capacitaciones': capacitaciones })
 
+@login_required
 def registro_factura(request):
     if request.method == 'POST':
         form = FacturaForm(request.POST)
@@ -329,10 +373,12 @@ def registro_factura(request):
         form = FacturaForm()
     return render(request, 'app/registro_factura.html', {'form': form,})
 
+@login_required
 def lista_factura(request):
     facturas = Factura.objects.select_related('empleado', 'capacitacion').all().order_by('-id')
     return render(request, 'app/lista_factura.html', {'facturas': facturas})
 
+@login_required
 def pagos_view(request):
     query = request.GET.get('q', '')
     tipo = request.GET.get('tipo', '')
@@ -396,6 +442,7 @@ def pagos_view(request):
 
     return render(request, 'app/pagos.html', context)
 
+@login_required
 def crear_profesion(request):
     if request.method == 'POST':
         form = ProfesionForm(request.POST)
@@ -412,6 +459,7 @@ def crear_profesion(request):
         form = ProfesionForm()
     return render(request, 'app/crear_profesion.html', {'form': form})
 
+@login_required
 def crear_afp(request):
     if request.method == 'POST':
         form = AFPForm(request.POST)

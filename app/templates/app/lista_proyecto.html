@@ -2,26 +2,64 @@
 {% block content %}
 <p style="margin-top: 20px;">
     <a href="{% url 'registro_proyecto' %}" id="btn_reg"> Registrar Nuevo Proyecto </a>
+    {% if filter == 'Todos' %}
+    <a href="{% url 'lista_proyecto' 'true'%}" id="btn_sec"> Ver Solo Activos</a>
+    {% else %}
+    <a href="{% url 'lista_proyecto' 'false'%}" id="btn_sec"> Ver Todos</a>
+    {% endif %}
 </p>
+
+
 <div style="max-width: 600px; margin: 50px auto;">
     <h1>Lista de Proyectos</h1>
+    <h2>{{ filter }}</h2>
+    {% if proyectos %}
+        <table border="1" style="width: 110%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f46464; color: #ffffff">
+                    <th style="padding: 10px;">ID</th>
+                    <th style="padding: 10px;">Nombre</th>
+                    <th style="padding: 10px;">Presupuesto</th>
+                    <th style="padding: 10px;">Fecha Inicio</th>
+                    <th style="padding: 10px;">Fecha Fin</th>
+                    <th style="padding: 10px;">Estado</th>
+                    <th style="padding: 10px;">Datos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proyecto in proyectos %}
+                <tr style="background-color: #ffffff;">
+                    <td style="padding: 10px;">{{ proyecto.id }}</td>
+                    <td style="padding: 10px;">{{ proyecto.name }}</td>
+                    <td style="padding: 10px;">{{ proyecto.budget }}</td>
+                    <td style="padding: 10px;">${{ proyecto.start_date }}</td>
+                    <td style="padding: 10px;">${{ proyecto.end_date }}</td>
+                    <td style="padding: 10px;">
+                        {% if proyecto.is_active %}
+                            <a href="{% url 'toggle_proyecto' proyecto.id%}"
+                               style="background: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
+                                 Desactivar
+                            </a>
+                        {% else %}
+                            <a href="{% url 'toggle_proyecto' proyecto.id%}"
+                               style="background: #28a745; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
+                                 Activar
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 10px;">
+                        <a href="{% url 'proyecto_empleados' proyecto.id%}"
+                           style="background: #6c757d; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
+                                Datos
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay proyectos registrados.</p>
+    {% endif %}
 
-    <form method="get" action="{% url 'lista_proyecto' 'true'%}">
-        <button type="submit">Ver solo activos</button>
-    </form>
-    <form method="get" action="{% url 'lista_proyecto' 'false'%}">
-        <button type="submit">Ver todos</button>
-    </form>
-
-    <h2>{{ filter }}:</h2>
-    {% for proyecto in proyectos %}
-    <h2>{{ proyecto.name }} ID: {{ proyecto.id }}</h2>
-    <form method="get" action="{% url 'toggle_proyecto' proyecto.id%}">
-        Estado: <button type="submit">{{ proyecto.is_active }}</button>
-    </form>
-    <form method="get" action="{% url 'proyecto_empleados' proyecto.id%}">
-        <button type="submit">Ver Empleados</button>
-    </form>
-    {% endfor %}
 </div>
 {% endblock %}

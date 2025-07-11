@@ -17,17 +17,31 @@
             <ul>
                 <li><a href="{% url 'home' %}">Inicio</a></li>
                 <li><a href="{% url 'lista_empleados' %}">Empleados</a></li>
-                <li><a href="{% url 'lista_asignaciones' %}">Asignaciones</a></li>
                 <li><a href="{% url 'lista_proyecto' %}">Proyectos</a></li>
+                <li><a href="{% url 'lista_asignaciones' %}">Asignaciones</a></li>
                 <li><a href="{% url 'lista_capacitacion' %}">Capacitaciones</a></li>
                 <li><a href="{% url 'lista_factura' %}">Facturas</a></li>
                 <li><a href="{% url 'lista_implementos' %}">Implementos</a></li>
-                <li><a href=#>Vehículos</a></li>
+                <li><a href="{% url 'lista_vehiculo' %}">Vehículos</a></li>
             </ul>
         </nav>
     </header>
     <div id="content">
+        <!-- Mensajes -->
+        {% if messages %}
+            {% for message in messages %}
+                <div style="background: green; color: white; padding: 10px; margin: 10px 0;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
+        <!-- Errores generales del formulario -->
+        {% if form.non_field_errors %}
+            <div style="background: red; color: white; padding: 10px; margin: 10px 0;">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
         {% block content %}
 
         {% endblock %}
@@ -41,12 +55,11 @@
         <p>2025 Bases de datos</p>
        <nav id="navbar">
     <ul>
-        <li><a href="{% url 'home' %}" style="background:none;border:none;color:blue;cursor:pointer;">Inicio</a></li>
         {% if user.is_authenticated %}
             <li>
                 <form action="{% url 'salir' %}" method="post" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">Salir</button>
+                    <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">Cerrar Sesión</button>
                 </form>
             </li>
         {% else %}
