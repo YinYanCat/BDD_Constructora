@@ -11,6 +11,7 @@ urlpatterns = [
     path('proyecto/<int:proyecto_id>/empleados/', proyecto_empleados, name='proyecto_empleados'),
 
     path('implementos/', lista_implementos, name='lista_implementos'),
+    path('implemento/<int:implemento_id>/cambiar_empleado/', cambiar_empleado_implemento, name='cambiar_empleado_implemento'),
     path('registro_implemento/', registro_implemento, name='registro_implemento'),
   
     path('registro_empleado/', registro_empleado, name='registro_empleado'),
@@ -28,6 +29,8 @@ urlpatterns = [
     path('lista_empleados_dia/<str:day_of_week>/', lista_empleados_dia, name='lista_empleados_dia'),
 
     path('registrar_vehiculo/', registrar_vehiculo, name='registrar_vehiculo'),
+    path('detalle_vehiculo/<str:patent>', detalle_vehiculo, name='detalle_vehiculo'),
+    path('vehiculo/<str:patent>/desasignar/<str:rut>/', desasignar_empleado, name='desasignar_empleado'),
     path('vehiculos/', lista_vehiculo, name='lista_vehiculo'),
 
     path('lista_capacitacion/', lista_capacitacion, name='lista_capacitacion'),

@@ -22,7 +22,20 @@
                 <tr style="background-color: #ffffff;">
                     <td style="padding: 10px;">{{ imp.id }}</td>
                     <td style="padding: 10px;">{{ imp.itype }}</td>
-                    <td style="padding: 10px;">{{ imp.worker.first_name }} {{ imp.worker.last_name }}</td>
+                    <td style="padding: 10px;">
+                        <form method="post" action="{% url 'cambiar_empleado_implemento' imp.id %}">
+                            {% csrf_token %}
+                            <select name="worker_rut">
+                                <option value="">-- Sin asignar --</option>
+                                {% for empleado in empleados %}
+                                    <option value="{{ empleado.rut }}" {% if imp.worker and empleado.rut == imp.worker.rut %}selected{% endif %}>
+                                        {{ empleado.first_name }} {{ empleado.last_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" style="margin-left: 8px;">Cambiar</button>
+                        </form>
+                    </td>
                     <td style="padding: 10px;">{{ imp.description }}</td>
                 </tr>
                 {% endfor %}

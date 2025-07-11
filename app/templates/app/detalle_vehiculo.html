@@ -1,0 +1,44 @@
+{% extends "app/base.html" %}
+{% block content %}
+
+<div style="max-width: 600px; margin: 50px auto;">
+  <h1>Datos de Vehiculo {{ vehiculo.patent }}</h1>
+  <h2>Modelo: {{ vehiculo.model }}</h2>
+  <p> Año: {{ vehiculo.year }}
+  <p> Estado: {{ vehiculo.status }}</p>
+  <p> Tipo: {{ vehiculo.vtype }}</p>
+
+
+  <form method="post">
+      {% csrf_token %}
+        <p>
+            <label>{{ form.worker.label }}:</label><br>
+            {{ form.worker }}
+            {% if form.worker.errors %}<br><span style="color: red;">{{ form.worker.errors }}</span>{% endif %}
+        </p>
+
+        <p>
+            <button type="submit" style="background: rgb(5, 146, 0); color: white; padding: 10px 20px; border: none;">
+                Asignar Empleado
+            </button>
+        </p>
+  </form>
+  <h2>Empleados Asignados:</h2>
+  <ul>
+    {% for empleado in empleados %}
+      <li>
+        {{ empleado.first_name }} {{ empleado.last_name }}
+        <form method="post" action="{% url 'desasignar_empleado' vehiculo.patent empleado.rut %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" style="background: red; color: white; border: none; padding: 5px 10px; margin-left: 10px;">
+            Desasignar
+          </button>
+        </form>
+      </li>
+    {% empty %}
+      <li>No hay empleados asignados a este Vehículo.</li>
+    {% endfor %}
+  </ul>
+
+</div>
+{% endblock %}

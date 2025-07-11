@@ -1,3 +1,4 @@
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
@@ -17,6 +18,8 @@ from .factories.ProyectoFactory import ProyectoFactory
 from .forms.EmpleadoForm import EmpleadoForm
 from .factories.EmpleadoFactory import EmpleadoFactory
 from .factories.VehiculoFactory import VehiculoFactory
+from .factories.EmpleadoVehiculoFactory import EmpleadoVehiculoFactory
+from .forms.EmpleadoVehiculoForm import EmpleadoVehiculoForm
 from .forms.VehiculoForm import VehiculoForm
 from .forms.ProyectoForm import ProyectoForm
 from .forms.EmpleadoProyectoForm import EmpleadoProyectoForm
@@ -105,7 +108,29 @@ def proyecto_empleados(request, proyecto_id):
 @login_required
 def lista_implementos(request):
     implementos = Implemento.objects.all()
-    return render(request, 'app/lista_implementos.html', {'implementos': implementos})
+    empleados = Empleado.objects.filter(is_active=True)
+    return render(request, 'app/lista_implementos.html', {
+        'implementos': implementos,
+        'empleados': empleados,
+    })
+
+@login_required
+def cambiar_empleado_implemento(request, implemento_id):
+    implemento = get_object_or_404(Implemento, id=implemento_id)
+
+    if request.method == 'POST':
+        rut = request.POST.get('worker_rut')
+
+        if rut:
+            empleado = get_object_or_404(Empleado, rut=rut)
+            implemento.worker = empleado
+        else:
+            implemento.worker = None  # quitar asignación
+
+        implemento.save()
+        messages.success(request, f"Empleado asignado a ({implemento.id}) - {implemento.itype} actualizado correctamente.")
+
+    return redirect('lista_implementos')
 
 @login_required
 def registro_implemento(request):
@@ -290,6 +315,50 @@ def lista_vehiculo(request):
     return render(request, 'app/lista_vehiculos.html', {
         'vehiculos': vehiculos
     })
+
+@login_required
+def detalle_vehiculo(request, patent=None):
+    vehiculo = Vehiculo.objects.filter(patent = patent).first()
+    if not vehiculo:
+        return HttpResponseNotFound("Vehículo no encontrado")
+    empleados_activos = Empleado.objects.filter(is_active=True)
+    asignados_ids = AsignacionVehiculo.objects.filter(vehicle=vehiculo).values_list('worker', flat=True)
+    asignados = empleados_activos.filter(rut__in=asignados_ids)
+
+    if request.method == 'POST':
+        form = EmpleadoVehiculoForm(vehiculo,request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            factory = EmpleadoVehiculoFactory()
+            try:
+                factory.crear_asignacion(vehiculo,data['worker'])
+                messages.success(request, 'Vehiculo registrado con exito.')
+                return redirect('detalle_vehiculo', patent=vehiculo.patent)
+            except Exception as e:
+                form.add_error(None, str(e))
+                print('here')
+    else:
+        form = EmpleadoVehiculoForm(vehiculo)
+
+    return render(request, 'app/detalle_vehiculo.html', {
+        'vehiculo' : vehiculo, 'empleados':asignados, 'form': form
+    })
+
+@login_required
+def desasignar_empleado(request, patent, rut):
+    if request.method == 'POST':
+        vehiculo = get_object_or_404(Vehiculo, patent=patent)
+        empleado = get_object_or_404(Empleado, rut=rut)
+        asignacion = get_object_or_404(
+            AsignacionVehiculo,
+            vehicle=vehiculo,
+            worker=empleado
+        )
+        asignacion.delete()
+        messages.success(request, "Empleado desasignado correctamente.")
+    return redirect('detalle_vehiculo', patent=patent)
+
+
 
 @login_required
 def asignar_empleado(request, vehiculo_id):
