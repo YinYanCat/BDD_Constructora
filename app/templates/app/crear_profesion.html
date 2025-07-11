@@ -1,19 +1,22 @@
 {% extends "app/base.html" %}
 {% load static %}
 {% block content %}
-<div class="container mt-4">
-    <h2>Crear Profesión</h2>
+<div style="max-width: 600px; margin: 50px auto;">
+    <h2>Agregar Profesión</h2>
     <form method="post" class="mt-3">
         {% csrf_token %}
-        <div class="mb-3">
-            {{ form.name.label_tag }}
+        <p>
+            <label>{{ form.name.label_tag }}:</label><br>
             {{ form.name }}
             {% if form.name.errors %}
-                <div class="text-danger">{{ form.name.errors }}</div>
+                <br><span class="text-danger">{{ form.name.errors }}</span>
             {% endif %}
-        </div>
-        <button type="submit" class="btn btn-primary">Crear</button>
-        <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+        </p>
+        <p>
+            <button type="submit" style="background: rgb(5, 146, 0); color: white; padding: 10px 20px; border: none;">
+                Agregar Profesión
+            </button>
+        </p>
     </form>
 </div>
 {% endblock %}

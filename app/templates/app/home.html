@@ -1,18 +1,18 @@
 {% extends 'app/base.html' %} 
 {% load static %}
-{% block js %} 
-{% endblock %} 
-{% block css %} 
-{% endblock %} 
+{% block js %}
+{% endblock %}
+{% block css %}
+{% endblock %}
 {% block content %} 
 
 <div style="max-width: 600px; margin: 50px auto; padding: 10px;">
     <h1>Inicio</h1>
-    <p> <a href=# class="btn"> Cuenta de Usuario </a> </p>
-    <p> <a href="{% url 'lista_empleados' %}" class="btn"> Datos de Empleados </a> </p>
+    <p> <a href="{% url 'lista_empleados_dia' %}" class="btn"> Horario de Empleados </a> </p>
+    <p> <a href="{% url 'lista_permisos' %}" class="btn"> Permisos de Empleados </a> </p>
     <p> <a href="{% url 'vista_pagos' %}" class="btn"> Gestión de Pagos </a> </p>
-    <p> <a href="{% url 'crear_profesion' %}" class="btn"> Crear Profesión </a> </p>
-    <p> <a href="{% url 'crear_afp' %}" class="btn"> Crear AFP </a> </p>
+    <p> <a href="{% url 'crear_profesion' %}" class="btn"> Agregar Profesión </a> </p>
+    <p> <a href="{% url 'crear_afp' %}" class="btn"> Agregar AFP </a> </p>
 </div>
 <style>
     .btn {

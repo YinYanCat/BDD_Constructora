@@ -9,12 +9,13 @@
     {% endif %}
 </p>
 
-
 <div style="max-width: 600px; margin: 50px auto;">
     <h1>Lista de Proyectos</h1>
-    <h2>{{ filter }}</h2>
+    <h2>{{ filter }} ({{ proyectos.count }})</h2>
+</div>
+<div style="max-width: 800px; margin: 50px auto;">
     {% if proyectos %}
-        <table border="1" style="width: 110%; border-collapse: collapse;">
+        <table border="1" style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr style="background-color: #f46464; color: #ffffff">
                     <th style="padding: 10px;">ID</th>
@@ -23,7 +24,7 @@
                     <th style="padding: 10px;">Fecha Inicio</th>
                     <th style="padding: 10px;">Fecha Fin</th>
                     <th style="padding: 10px;">Estado</th>
-                    <th style="padding: 10px;">Datos</th>
+                    <th style="padding: 10px;">Otros</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,25 +33,25 @@
                     <td style="padding: 10px;">{{ proyecto.id }}</td>
                     <td style="padding: 10px;">{{ proyecto.name }}</td>
                     <td style="padding: 10px;">{{ proyecto.budget }}</td>
-                    <td style="padding: 10px;">${{ proyecto.start_date }}</td>
-                    <td style="padding: 10px;">${{ proyecto.end_date }}</td>
+                    <td style="padding: 10px;">{{ proyecto.start_date }}</td>
+                    <td style="padding: 10px;">{{ proyecto.end_date }}</td>
                     <td style="padding: 10px;">
                         {% if proyecto.is_active %}
                             <a href="{% url 'toggle_proyecto' proyecto.id%}"
-                               style="background: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
-                                 Desactivar
+                               style="background: #28a745; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
+                                 ACTIVO
                             </a>
                         {% else %}
                             <a href="{% url 'toggle_proyecto' proyecto.id%}"
-                               style="background: #28a745; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
-                                 Activar
+                               style="background: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
+                                 INACTIVO
                             </a>
                         {% endif %}
                     </td>
                     <td style="padding: 10px;">
                         <a href="{% url 'proyecto_empleados' proyecto.id%}"
                            style="background: #6c757d; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
-                                Datos
+                                DATOS
                         </a>
                     </td>
                 </tr>

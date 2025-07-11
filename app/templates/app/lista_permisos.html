@@ -1,1 +1,33 @@
-    <h1>HOLA AMIGUITOS</h1>
+{% extends 'app/base.html' %}
+
+{% block content %}
+<p style="margin-top: 20px;">
+    <a href="{% url 'registro_permiso'%}" id="btn_reg"> Registrar Permiso </a>
+</p>
+<div style="max-width: 600px; margin: 50px auto;">
+    {% if permisos %}
+        <table border="1" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f46464; color: #ffffff">
+                    <th style="padding: 10px;">Empleado</th>
+                    <th style="padding: 10px;">Fecha Inicio</th>
+                    <th style="padding: 10px;">Fecha Fin</th>
+                    <th style="padding: 10px;">Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for permiso in permisos %}
+                <tr style="background-color: #ffffff;">
+                    <td style="padding: 10px;">{{ permiso.worker.first_name }} {{ permiso.worker.last_name }}</td>
+                    <td style="padding: 10px;">{{ permiso.start }}</td>
+                    <td style="padding: 10px;">{{ permiso.end }}</td>
+                    <td style="padding: 10px;">{{ permiso.ptype }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay permisos registrados.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Horario</title>
-</head>
-<body>
+{% extends 'app/base.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 50px auto;">
+    <h1>Registro de Nuevo Horario</h1>
     <form method="post">
         {% csrf_token %}
 
@@ -35,9 +32,9 @@
 
         <p>
             <button type="submit" style="background: rgb(5, 146, 0); color: white; padding: 10px 20px; border: none;">
-                Registrar Horario
+                Asignar Horario
             </button>
         </p>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}

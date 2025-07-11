@@ -1,17 +1,28 @@
 {% extends "app/base.html" %}
-
 {% block content %}
-<h1>Empleados en proyecto: {{ proyecto.name }}</h1>
 
-<ul>
-  {% for ep in empleados_proyecto %}
-    <li>
-      {{ ep.worker.first_name }} {{ ep.worker.last_name }} - Posición: {{ ep.position }} - Bono: {{ ep.bonus_pay }}
-    </li>
-  {% empty %}
-    <li>No hay empleados asignados a este proyecto.</li>
-  {% endfor %}
-</ul>
+<div style="max-width: 600px; margin: 50px auto;">
+  <h1>Datos de Proyecto {{ proyecto.id }}:
+        {% if proyecto.is_active %}
+        (Activo)
+        {% else %}
+        (Inactivo)
+        {% endif %} </h1>
+  <h2>Nombre: {{ proyecto.name }}</h2>
+  <p> Plazo: {{ proyecto.start_date }} - {{ proyecto.end_date }}</p>
+  <p> Presupuesto: ${{ proyecto.budget }}</p>
+  <p> Descripción: {{ proyecto.description }}</p>
 
-<a href="{% url 'home' %}">Volver al inicio</a>
+  <h2>Empleados:</h2>
+  <ul>
+    {% for ep in empleados_proyecto %}
+      <li>
+        {{ ep.worker.first_name }} {{ ep.worker.last_name }} - Posición: {{ ep.position }} - Bono: {{ ep.bonus_pay }}
+      </li>
+    {% empty %}
+      <li>No hay empleados asignados a este proyecto.</li>
+    {% endfor %}
+  </ul>
+
+</div>
 {% endblock %}

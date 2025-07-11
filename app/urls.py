@@ -4,8 +4,6 @@ urlpatterns = [
     path('', home, name='home'),
     path('salir/', salir, name='salir'),
 
-    path('registro_permiso/', registro_permiso, name='registro_permiso'),
-
     path('registro_proyecto/', registro_proyecto, name='registro_proyecto'),
     path('lista_proyecto/', lista_proyecto, name='lista_proyecto'),
     path('lista_proyecto/<str:activos>/', lista_proyecto, name='lista_proyecto'),
@@ -19,19 +17,18 @@ urlpatterns = [
     path('empleado/<str:empleado_rut>/toggle/', toggle_empleado_status, name='toggle_empleado_status'),
     path('lista_empleados/', lista_empleados, name='lista_empleados'),
     path('lista_empleados/<str:activos>/', lista_empleados, name='lista_empleados'),
+    path('datos_empleado/<str:rut>/', datos_empleado, name='datos_empleado'),
+
     path('asignar_empleado_proyecto/', asignar_empleado_proyecto, name='asignar_empleado_proyecto'),
     path('lista_asignaciones/', lista_asignaciones, name='lista_asignaciones'),
   
     path('registro_horario/', registro_horario, name='registro_horario'),
-    path('lista_horario/', lista_horario, name='lista_horario'),
-    path('lista_horario/<str:rut>/', lista_horario, name='lista_horario_empleado'),
+    path('registro_horario/<str:rut>/', registro_horario, name='registro_horario'),
     path('lista_empleados_dia/', lista_empleados_dia, name='lista_empleados_dia'),
     path('lista_empleados_dia/<str:day_of_week>/', lista_empleados_dia, name='lista_empleados_dia'),
 
     path('registrar_vehiculo/', registrar_vehiculo, name='registrar_vehiculo'),
     path('vehiculos/', lista_vehiculo, name='lista_vehiculo'),
-    path('vehiculos/<str:vehiculo_id>/asignar/', asignar_empleado, name='asignar_empleado'),
-    path('vehiculos/<str:vehiculo_id>/quitar/<str:empleado_id>/', quitar_empleado, name='quitar_empleado'),
 
     path('lista_capacitacion/', lista_capacitacion, name='lista_capacitacion'),
     path('registro_capacitacion/', registro_capacitacion, name='registro_capacitacion'),
@@ -39,7 +36,7 @@ urlpatterns = [
     path('lista_factura/', lista_factura, name='lista_factura'),
     path('registro_factura/', registro_factura, name='registro_factura'),
 
-    path('registro_permisos/', registro_permiso, name='registro_permisos'),
+    path('registro_permiso/', registro_permiso, name='registro_permiso'),
     path('lista_permisos/', lista_permisos, name='lista_permisos'),
 
     path('pagos/', pagos_view, name='vista_pagos'),

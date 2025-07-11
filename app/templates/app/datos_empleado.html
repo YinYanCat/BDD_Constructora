@@ -1,0 +1,37 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<p style="margin-top: 20px;">
+    <a href="{% url 'registro_horario' empleado.rut%}" id="btn_reg"> Asignar Horario </a>
+    <a href="{% url 'registro_permiso' %}" id="btn_reg"> Registrar Permiso </a>
+</p>
+
+<div style="max-width: 600px; margin: 50px auto;">
+    <h1>Datos de Empleado
+        {% if empleado.is_active %}
+        (Activo)
+        {% else %}
+        (Inactivo)
+        {% endif %} </h1>
+    <h2>Nombre: {{ empleado.first_name }} {{ empleado.last_name }}</h2>
+    <p>Rut: {{ empleado.rut }}</p>
+    <p>Profesión: {{ empleado.profesion }} </p>
+    <p>Salario: ${{ empleado.salary }} </p>
+    <p>Teléfono: {{ empleado.phone }} </p>
+    <p>Email: {{ empleado.email }} </p>
+    <p>AFP: {{ empleado.afp }} </p>
+    <p>Fecha de contratación: {{ empleado.contract_date }} </p>
+    <h2>Lista de Horarios: </h2>
+        {% for horario in horarios %}
+        <div>
+            <p>{{ horario.day_of_week }} ({{ horario.start }} - {{ horario.end }})</p>
+        </div>
+        {% endfor %}
+    <h2>Lista de Permisos: </h2>
+        {% for permiso in permisos %}
+        <div>
+            <p>{{ permiso.ptype }} ({{ permiso.start }} - {{ permiso.end }})</p>
+        </div>
+        {% endfor %}
+</div>
+{% endblock %}

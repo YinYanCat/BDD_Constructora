@@ -12,18 +12,19 @@
 <div style="max-width: 600px; margin: 50px auto;">
     <h1>Lista de Empleados</h1>
     <h2>{{ filter }} ({{ empleados.count }})</h2>
-
+</div>
+<div style="max-width: 800px; margin: 50px auto;">
     {% if empleados %}
-        <table border="1" style="width: 110%; border-collapse: collapse;">
+        <table border="1" style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr style="background-color: #f46464; color: #ffffff">
                     <th style="padding: 10px;">RUT</th>
                     <th style="padding: 10px;">Nombre</th>
                     <th style="padding: 10px;">Cargo</th>
-                    <th style="padding: 10px;">Salario</th>
-                    <th style="padding: 10px;">AFP</th>
+                    <th style="padding: 10px;">Teléfono</th>
+                    <th style="padding: 10px;">Fecha Contrato</th>
                     <th style="padding: 10px;">Estado</th>
-                    <th style="padding: 10px;">Acciones</th>
+                    <th style="padding: 10px;">Otros</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,27 +33,26 @@
                     <td style="padding: 10px;">{{ empleado.rut }}</td>
                     <td style="padding: 10px;">{{ empleado.first_name }} {{ empleado.last_name }}</td>
                     <td style="padding: 10px;">{{ empleado.profesion }}</td>
-                    <td style="padding: 10px;">${{ empleado.salary }}</td>
-                    <td style="padding: 10px;">{{ empleado.afp.name }}</td>
+                    <td style="padding: 10px;">{{ empleado.phone }}</td>
+                    <td style="padding: 10px;">{{ empleado.contract_date }}</td>
                     <td style="padding: 10px;">
                         {% if empleado.is_active %}
-                            <span style="color: green; font-weight: bold;"> Activo</span>
+                            <a href="{% url 'toggle_empleado_status' empleado.rut %}"
+                               style="background: #28a745; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
+                                 ACTIVO
+                            </a>
                         {% else %}
-                            <span style="color: #7d7d7d; font-weight: bold;"> Inactivo</span>
+                            <a href="{% url 'toggle_empleado_status' empleado.rut %}"
+                               style="background: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
+                                 INACTIVO
+                            </a>
                         {% endif %}
                     </td>
                     <td style="padding: 10px;">
-                        {% if empleado.is_active %}
-                            <a href="{% url 'toggle_empleado_status' empleado.rut %}" 
-                               style="background: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
-                                 Desactivar
-                            </a>
-                        {% else %}
-                            <a href="{% url 'toggle_empleado_status' empleado.rut %}" 
-                               style="background: #28a745; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
-                                 Activar
-                            </a>
-                        {% endif %}
+                        <a href="{% url 'datos_empleado' empleado.rut %}"
+                           style="background: #6c757d; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 12px;">
+                                DATOS
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}

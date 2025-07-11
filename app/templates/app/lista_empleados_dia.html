@@ -1,29 +1,24 @@
-<!DOCTYPE html>
-<html lang="en" translate="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Horarios</title>
-    
+{% extends 'app/base.html' %}
 
-</head>
-    <body>
-        <div>
-            <section>
-                <h1>Empleados con horario el día {{ day }}</h1>
-                    {% for code, label in days %}
-                      <form method="get" action="{% url 'lista_empleados_dia' code %}">
-                        <button type="submit">{{ label }}</button>
-                      </form>
-                    {% endfor %}
-                    <ul>
-                      {% for empleado in data %}
-                        <li>{{ empleado.first_name }} {{ empleado.last_name }}</li>
-                      {% empty %}
-                        <li>No hay empleados con horario este día.</li>
-                      {% endfor %}
-                    </ul>
-            </section>
-        </div>
-    </body>
-</html>
+{% block content %}
+<p style="margin-top: 20px;">
+    <a href="{% url 'registro_horario'%}" id="btn_reg"> Asignar Horario </a>
+</p>
+<div style="max-width: 725px; margin: 50px auto;">
+    <p style="margin-top: 20px;">
+        {% for code, label in days %}
+        <a href="{% url 'lista_empleados_dia' code %}" id="btn_sec"> {{ label }} </a>
+        {% endfor %}
+    </p>
+</div>
+<div style="max-width: 600px; margin: 50px auto;">
+    <h1>Empleados con horario el día {{ day }}</h1>
+    <ul>
+        {% for empleado in data %}
+        <li>{{ empleado.first_name }} {{ empleado.last_name }}</li>
+        {% empty %}
+        <li>No hay empleados con horario este día.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

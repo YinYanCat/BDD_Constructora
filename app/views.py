@@ -30,7 +30,9 @@ from .forms.PagoInsumoServForm import PagoInsumoServForm
 from .forms.PagoVehiculoForm import PagoVehiculoForm
 from .forms.PagoImplementoForm import PagoImplementoForm
 
-from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, AsignacionVehiculo, Capacitacion, Factura, Pago, PagoEmpleado, PagoInsumoServicio, PagoImplemento, PagoVehiculo
+from .models import Proyecto, EmpleadoProyecto, Implemento, Empleado, AsignacionVehiculo, Horario, Vehiculo, \
+    AsignacionVehiculo, Capacitacion, Factura, Pago, PagoEmpleado, PagoInsumoServicio, PagoImplemento, PagoVehiculo, \
+    Permiso
 
 from .factories.ProfesionFactory import ProfesionFactory
 from .forms.ProfesionForm import ProfesionForm
@@ -68,7 +70,8 @@ def registro_permiso(request):
 
 @login_required
 def lista_permisos(request):
-    return render(request, 'app/lista_permisos.html')
+    permisos = Permiso.objects.all()
+    return render(request, 'app/lista_permisos.html', {'permisos': permisos})
 
 @login_required
 def lista_proyecto(request, activos = 'true'):
@@ -101,7 +104,7 @@ def proyecto_empleados(request, proyecto_id):
 
 @login_required
 def lista_implementos(request):
-    implementos = Implemento.objects.select_related('worker').all()
+    implementos = Implemento.objects.all()
     return render(request, 'app/lista_implementos.html', {'implementos': implementos})
 
 @login_required
@@ -124,22 +127,24 @@ def registro_implemento(request):
     return render(request, 'app/registro_implemento.html', {'form': form,})
 
 @login_required
-def registro_horario(request):
+def registro_horario(request, rut=None):
+    empleado = Empleado.objects.filter(rut=rut).first()
     if request.method == 'POST':
         form = HorarioForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             factory = HorarioFactory()
-            try: 
-                factory.crear_horario(
-                    data['worker'], data['day_of_week'], data['start'], data['end']
-                )
+            try:
+                factory.crear_horario(data['worker'], data['day_of_week'], data['start'], data['end'])
                 messages.success(request, 'Horario creado con exito.')
                 return redirect('registro_horario')
             except Exception as e:
                 form.add_error(None, str(e))
     else:
-        form = HorarioForm()
+        if rut is None:
+            form = HorarioForm()
+        else:
+            form = HorarioForm(initial={'worker': empleado.rut})
     return render(request, 'app/registro_horario.html', {'form': form})
 
 @login_required
@@ -211,13 +216,15 @@ def lista_asignaciones(request):
     return render(request, 'app/lista_asignaciones.html', {'asignaciones': asignaciones})
 
 @login_required
-def lista_horario(request, rut=None):
-    if rut is not None:
-        horarios = Horario.objects.filter(worker = rut)
-        return render(request, 'app/lista_horario_empleado.html', {'data' : horarios})
-    else:
-        empleados = Empleado.objects.filter(is_active=True)
-        return render(request, 'app/lista_horario.html', {'data':empleados})
+def datos_empleado(request, rut):
+    empleado = get_object_or_404(Empleado, rut=rut)
+    horarios = Horario.objects.filter(worker=empleado)
+    permisos = Permiso.objects.filter(worker=empleado)
+    return render(request, 'app/datos_empleado.html', {
+        'empleado': empleado,
+        'horarios': horarios,
+        'permisos': permisos,
+    })
 
 @login_required
 def lista_empleados_dia(request, day_of_week=None):
